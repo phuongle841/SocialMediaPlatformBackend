@@ -4,7 +4,7 @@
 
 namespace SocialMediaPlatformBackend.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("[controller]/api")]
     [ApiController]
     public class ValuesController : ControllerBase
     {
@@ -22,6 +22,7 @@ namespace SocialMediaPlatformBackend.Controllers
             return "value";
         }
 
+
         // POST api/<ValuesController>
         [HttpPost]
         public void Post([FromBody] string value)
@@ -35,9 +36,26 @@ namespace SocialMediaPlatformBackend.Controllers
         }
 
         // DELETE api/<ValuesController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
+        [HttpDelete("{id}/{name}")]
+        public void Delete(int id, string name)
         {
+            Console.WriteLine($"Deleted value with ID: {id}");
+            Console.WriteLine($"and this is the additional parameter just to test: {name}");
+        }
+    }
+
+    [ApiController]
+    public class ProfileController : ControllerBase
+    {
+        [HttpGet("profile")]
+        public Profile GetProfile()
+        {
+            return new Profile
+            {
+                Name = "John Doe",
+                Avatar = "https://example.com/avatar.jpg",
+                CreateDate = DateTime.Now
+            };
         }
     }
 }
