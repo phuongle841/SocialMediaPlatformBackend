@@ -50,12 +50,7 @@ namespace SocialMediaPlatformBackend.Controllers
         [HttpGet("profile")]
         public Profile GetProfile()
         {
-            return new Profile
-            {
-                Name = "John Doe",
-                Avatar = "https://example.com/avatar.jpg",
-                CreateDate = DateTime.Now
-            };
+            return new Profile();
         }
     }
 }

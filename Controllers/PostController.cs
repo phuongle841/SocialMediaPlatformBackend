@@ -1,4 +1,8 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
+using SocialMediaPlatformBackend.Data;
+using SocialMediaPlatformBackend.Data.DTO;
+using SocialMediaPlatformBackend.Models;
 using System.Text.Json;
 
 namespace SocialMediaPlatformBackend.Controllers
@@ -7,55 +11,47 @@ namespace SocialMediaPlatformBackend.Controllers
     [ApiController]
     public class PostController : ControllerBase
     {
-        [HttpGet]
-        public IEnumerable<string> Get()
+        private readonly AppDbContext _context;
+        private readonly IMapper _mapper;
+        private readonly ILogger<PostController> _logger;
+        public PostController(AppDbContext context, IMapper mapper, ILogger<PostController> logger)
         {
-            List<string> Posts = new List<string>
+            _context = context;
+            _mapper = mapper;
+            _logger = logger;
+        }
+
+        [HttpGet]
+        public string Get()
+        {
+            string response = JsonSerializer.Serialize("Hello from PostController");
+            Post post = new Post
             {
-                "Post 1",
-                "Post 2",
-                "Post 3"
+                Post_id = 1,
+                content = "This is a sample post",
+                image_url = "http://example.com/image.jpg",
+                created_at = DateTime.Now,
+                updated_at = DateTime.Now,
+                likes_count = 10,
+                comments_count = 5,
+                is_active = true,
+                user_id = 1
             };
-            string Json = JsonSerializer.Serialize(Posts);
-            Console.WriteLine(Json);
-            return Posts;
+            var postDTO = _mapper.Map<PostDTO>(post);
+            _logger.LogInformation("Mapped Post to PostDTO: {@PostDTO}", postDTO);
+            return response;
         }
         [HttpGet("{id}")]
         public String Get(int id)
         {
-            List<string> Posts = new List<string>
-            {
-                "Post 1",
-                "Post 2",
-                "Post 3"
-            };
-
-
-            List<Profile> profiles = new List<Profile>();
-            int length = id;
-            for (int i = 0; i < length; i++)
-            {
-                Profile profile = new Profile
-                {
-                    Name = "John Doe " + i,
-                    Avatar = "https://example.com/avatar" + i + ".jpg",
-                    CreateDate = DateTime.Now.AddDays(-i)
-                };
-                profiles.Add(profile);
-            }
-            var options = new JsonSerializerOptions { WriteIndented = true };
-            string response = JsonSerializer.Serialize(profiles, options);
-            //System.Diagnostics.Debug.WriteLine(profiles);
-            Console.WriteLine(response);
-
+            string response = JsonSerializer.Serialize($"Hello from PostController with id: {id}");
             return response;
         }
 
         [HttpPost]
         public string Post([FromBody] string value)
         {
-            // Here you would typically save the post to a database
-            Console.WriteLine($"Post created: {value}");
+            string response = JsonSerializer.Serialize(value);
             return "Ok";
         }
 

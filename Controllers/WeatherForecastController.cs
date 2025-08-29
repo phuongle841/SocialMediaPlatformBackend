@@ -55,7 +55,5 @@ namespace SocialMediaPlatformBackend.Controllers
             })
             .ToArray();
         }
-
-
     }
 }

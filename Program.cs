@@ -1,5 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using SocialMediaPlatformBackend.Data;
+using SocialMediaPlatformBackend.Data.DTO;
+using SocialMediaPlatformBackend.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,6 +13,11 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+builder.Services.AddAutoMapper(cfg =>
+{
+    cfg.CreateMap<Post, PostDTO>().ReverseMap();
+});
 
 var app = builder.Build();
 
