@@ -18,56 +18,41 @@ namespace SocialMediaPlatformBackend.Data
         {
             base.OnModelCreating(modelBuilder);
             // Configure the Profile entity
-            modelBuilder.Entity<Profile>(entity =>
-            {
-                entity.HasKey(e => e.user_id);
-                entity.Property(e => e.username).IsRequired().HasMaxLength(50);
-                entity.Property(e => e.email).IsRequired().HasMaxLength(100);
-                entity.Property(e => e.password_hash).IsRequired();
-                entity.Property(e => e.first_name).HasMaxLength(50);
-                entity.Property(e => e.last_name).HasMaxLength(50);
-                entity.Property(e => e.profile_picture).HasMaxLength(255);
-                entity.Property(e => e.bio).HasMaxLength(500);
-                entity.Property(e => e.created_at).HasDefaultValueSql("CURRENT_TIMESTAMP");
-                entity.Property(e => e.updated_at).HasDefaultValueSql("CURRENT_TIMESTAMP");
-                entity.Property(e => e.is_active).HasDefaultValue(true);
-                entity.Property(e => e.last_login).HasDefaultValueSql("CURRENT_TIMESTAMP");
-            });
-            // Configure the Post entity
-            modelBuilder.Entity<Post>(entity =>
-            {
-                entity.HasKey(e => e.Post_id);
-                entity.Property(e => e.content).IsRequired().HasMaxLength(1000);
-                entity.Property(e => e.image_url).HasMaxLength(255);
-                entity.Property(e => e.created_at).HasDefaultValueSql("CURRENT_TIMESTAMP");
-                entity.Property(e => e.updated_at).HasDefaultValueSql("CURRENT_TIMESTAMP");
-                entity.Property(e => e.likes_count).HasDefaultValue(0);
-                entity.Property(e => e.comments_count).HasDefaultValue(0);
-                entity.Property(e => e.is_active).HasDefaultValue(true);
-                // Configure the foreign key relationship with Profile
-                entity.HasOne(d => d.Profile)
-                      .WithMany()
-                      .HasForeignKey(d => d.user_id)
-                      .OnDelete(DeleteBehavior.Cascade)
-                      .IsRequired();
-            });
 
-            // Seed initial data if necessary
-            var initialProfile = new Profile
-            {
-                user_id = 1,
-                username = "admin",
-                email = "",
-            };
-            modelBuilder.Entity<Profile>().HasData(initialProfile);
 
-            var initialPost = new Post
-            {
-                Post_id = 1,
-                content = "Welcome to the Social Media Platform!",
-                user_id = initialProfile.user_id
-            };
-            modelBuilder.Entity<Post>().HasData(initialPost);
+            // Seeding data
+            modelBuilder.Entity<Profile>().HasData(
+                new Profile
+                {
+                    ProfileId = 1,
+                    Username = "john_doe",
+                    Email = "John@google.com",
+                    PasswordHash = "hashed_password_123",
+                    FirstName = "John",
+                    LastName = "Doe",
+                    ProfilePicture = "https://pbs.twimg.com/profile_images/1938321133884813312/BU8hdbr__400x400.jpg",
+                    Bio = "Just a regular John Doe.",
+                    DateOfBirth = new DateTime(1990, 1, 1),
+                }
+            );
+
+            var fixedTime = new DateTime(2025, 8, 29, 10, 0, 0);
+            modelBuilder.Entity<Post>().HasData(
+                new Post
+                {
+                    PostId = 1,
+                    Content = "Hello, world! This is my first post.",
+                    ImageUrl = "https://example.com/posts/first_post.jpg",
+                    CreatedAt = fixedTime,
+                    UpdatedAt = fixedTime,
+                    LikesCount = 0,
+                    CommentsCount = 0,
+                    IsActive = true,
+                    //ProfileId = 1 // Foreign key to the seeded profile
+                }
+            );
+
         }
+
     }
 }
