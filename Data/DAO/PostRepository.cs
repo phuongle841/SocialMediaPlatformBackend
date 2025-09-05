@@ -25,9 +25,9 @@ namespace SocialMediaPlatformBackend.Data.DAO
         public async Task<List<Post>> getAllPosts()
         {
             List<Post> posts = await _dbContext.Posts.ToListAsync();
-            _dbContext.Database.EnsureDeleted();
-            _dbContext.Database.EnsureCreated();
-            _dbContext.SaveChanges();
+            //_dbContext.Database.EnsureDeleted();
+            //_dbContext.Database.EnsureCreated();
+            //_dbContext.SaveChanges();
             return posts;
         }
 

@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using SocialMediaPlatformBackend.Data;
 using SocialMediaPlatformBackend.Data.DAO;
+using SocialMediaPlatformBackend.Data.DTO;
 using SocialMediaPlatformBackend.Models;
 
 namespace SocialMediaPlatformBackend.Controllers
@@ -24,11 +25,18 @@ namespace SocialMediaPlatformBackend.Controllers
         public async Task<IActionResult> Get(string? Order)
         {
             IEnumerable<Post> repoPost = await _postRepository.getAllPosts();
-            foreach (var item in repoPost)
-            {
-                _logger.LogInformation("Post Item: {@Item}", item.PostId);
-            }
-            return Ok(repoPost);
+
+            IEnumerable<PostDTO> dtoPosts = from b in repoPost
+                                            select new PostDTO()
+                                            {
+                                                Post_id = b.PostId,
+                                                content = b.Content,
+                                                image_url = b.ImageUrl,
+                                                created_at = b.CreatedAt,
+                                                likes_count = b.LikesCount,
+                                                comments_count = b.CommentsCount,
+                                            };
+            return Ok(dtoPosts);
         }
 
         [HttpGet("{id}")]
