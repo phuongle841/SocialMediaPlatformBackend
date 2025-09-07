@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System.Text.Json;
+using SocialMediaPlatformBackend.Data.DAO;
+using SocialMediaPlatformBackend.Data.DTO;
+using SocialMediaPlatformBackend.Models;
 
 namespace SocialMediaPlatformBackend.Controllers
 {
@@ -7,64 +9,97 @@ namespace SocialMediaPlatformBackend.Controllers
     [ApiController]
     public class PostController : ControllerBase
     {
-        [HttpGet]
-        public IEnumerable<string> Get()
+        private readonly ILogger<PostController> _logger;
+        private readonly IRepository<Post> _postRepository;
+        public PostController(IRepository<Post> postRepository, ILogger<PostController> logger)
         {
-            List<string> Posts = new List<string>
-            {
-                "Post 1",
-                "Post 2",
-                "Post 3"
-            };
-            string Json = JsonSerializer.Serialize(Posts);
-            Console.WriteLine(Json);
-            return Posts;
+            _postRepository = postRepository;
+            _logger = logger;
         }
-        [HttpGet("{id}")]
-        public String Get(int id)
+
+        [HttpGet]
+        public async Task<IActionResult> Get([FromQuery] string? order)
         {
-            List<string> Posts = new List<string>
+            IEnumerable<Post> repoPost = await _postRepository.getAll();
+
+            if (order?.ToLower() == "asc")
             {
-                "Post 1",
-                "Post 2",
-                "Post 3"
+                repoPost = repoPost.OrderBy(p => p.CreatedAt);
+            }
+
+            IEnumerable<PostDTO> dtoPosts = from b in repoPost
+                                            select new PostDTO()
+                                            {
+                                                PostId = b.PostId,
+                                                Content = b.Content,
+                                                ImageUrl = b.ImageUrl,
+                                                CreatedAt = b.CreatedAt,
+                                                LikesCount = b.LikesCount,
+                                                CommentsCount = b.CommentsCount,
+                                            };
+            return Ok(dtoPosts);
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> Get(int id)
+        {
+            Post? post = await _postRepository.getById(id);
+            if (post == null)
+            {
+                return NotFound();
+            }
+            PostDTO postDTO = new PostDTO()
+            {
+                PostId = post.PostId,
+                Content = post.Content,
+                ImageUrl = post.ImageUrl,
+                CreatedAt = post.CreatedAt,
+                LikesCount = post.LikesCount,
+                CommentsCount = post.CommentsCount,
             };
 
-
-            List<Profile> profiles = new List<Profile>();
-            int length = id;
-            for (int i = 0; i < length; i++)
-            {
-                Profile profile = new Profile
-                {
-                    Name = "John Doe " + i,
-                    Avatar = "https://example.com/avatar" + i + ".jpg",
-                    CreateDate = DateTime.Now.AddDays(-i)
-                };
-                profiles.Add(profile);
-            }
-            var options = new JsonSerializerOptions { WriteIndented = true };
-            string response = JsonSerializer.Serialize(profiles, options);
-            //System.Diagnostics.Debug.WriteLine(profiles);
-            Console.WriteLine(response);
-
-            return response;
+            return Ok(postDTO);
         }
 
         [HttpPost]
-        public string Post([FromBody] string value)
+        public async Task<IActionResult> Post([FromBody] PostDTO postDTO)
         {
-            // Here you would typically save the post to a database
-            Console.WriteLine($"Post created: {value}");
-            return "Ok";
+            Post post = new Post
+            {
+                Content = postDTO.Content,
+                ImageUrl = postDTO.ImageUrl,
+                CreatedAt = DateTime.Now,
+                LikesCount = 0,
+                CommentsCount = 0,
+                IsActive = true
+            };
+            await _postRepository.Add(post);
+
+            return CreatedAtAction(nameof(Get), new { id = post.PostId }, postDTO);
         }
 
         [HttpPut("{id}")]
-        public string Put(int id, [FromBody] string value)
+        public async Task<IActionResult> Put(int id, [FromBody] PostDTO postDTO)
         {
-            // Here you would typically update the post in the database
-            Console.WriteLine($"Post with ID {id} updated to: {value}");
-            return "Ok";
+            Post post = new Post
+            {
+                PostId = id,
+                Content = postDTO.Content,
+                ImageUrl = postDTO.ImageUrl,
+            };
+            await _postRepository.Update(post);
+
+            return Ok();
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeletePost(int id)
+        {
+            Post post = await _postRepository.getById(id);
+            if (post == null) return NotFound();
+
+            await _postRepository.Delete(post);
+            return Ok();
         }
     }
 }
