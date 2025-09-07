@@ -3,43 +3,67 @@ using SocialMediaPlatformBackend.Models;
 
 namespace SocialMediaPlatformBackend.Data.DAO
 {
-    public class PostRepository : IPostRepository
+    public class PostRepository : IRepository<Post>
     {
         private readonly AppDbContext _dbContext;
-        public PostRepository(AppDbContext dbContext)
+        private readonly ILogger<PostRepository> _logger;
+        public PostRepository(AppDbContext dbContext, ILogger<PostRepository> logger)
         {
             _dbContext = dbContext;
+            _logger = logger;
         }
 
-        public Task AddPost(Post entity)
+        public async Task<Post> Add(Post entity)
         {
-            throw new NotImplementedException();
+            var result = _dbContext.Posts.AddAsync(entity);
+            await _dbContext.SaveChangesAsync();
+            return entity;
         }
 
-        public async Task DeletePost(Post entity)
+        public async Task<Post> Delete(Post entity)
         {
-            throw new NotImplementedException();
+            var deletedPost = await _dbContext.Posts.FindAsync(entity.PostId);
+            if (deletedPost == null)
+            {
+                return null;
+            }
+            _dbContext.Posts.Remove(deletedPost);
+            await _dbContext.SaveChangesAsync();
+            return entity;
         }
 
 
-        public async Task<List<Post>> getAllPosts()
+        public async Task<List<Post>> getAll()
         {
             List<Post> posts = await _dbContext.Posts.ToListAsync();
-            //_dbContext.Database.EnsureDeleted();
-            //_dbContext.Database.EnsureCreated();
-            //_dbContext.SaveChanges();
             return posts;
         }
 
-        public async Task<Post> getPostById(int id)
+        public async Task<Post> getById(int id)
         {
-            Post? post = await _dbContext.Posts.FindAsync(id);
-            return post;
+            try
+            {
+                Post post = await _dbContext.Posts.FindAsync(id);
+                return post;
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "An error occurred while retrieving the post with ID {PostId}", id);
+                throw;
+            }
         }
 
-        public async Task UpdatePost(Post entity)
+        public async Task<Post> Update(Post entity)
         {
-            throw new NotImplementedException();
+            Post existingPost = await _dbContext.Posts.FindAsync(entity.PostId);
+            if (existingPost == null)
+            {
+                return null;
+            }
+            existingPost.Content = entity.Content;
+            existingPost.ImageUrl = entity.ImageUrl;
+            await _dbContext.SaveChangesAsync();
+            return entity;
         }
     }
 }

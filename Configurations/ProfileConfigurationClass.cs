@@ -22,7 +22,7 @@ namespace SocialMediaPlatformBackend.Configurations
                 new Profile
                 {
                     ProfileId = 2,
-                    Username = "john_doe",
+                    Username = "Cyb3rAngel",
                     Email = "John@google.com",
                     PasswordHash = "hashed_password_123",
                     FirstName = "John",

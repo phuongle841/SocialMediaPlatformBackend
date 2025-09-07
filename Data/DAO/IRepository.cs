@@ -1,13 +1,11 @@
-﻿using SocialMediaPlatformBackend.Models;
-
-namespace SocialMediaPlatformBackend.Data.DAO
+﻿namespace SocialMediaPlatformBackend.Data.DAO
 {
-    public interface IPostRepository
+    public interface IRepository<T> where T : class
     {
-        Task<List<Post>> getAllPosts();
-        Task<Post> getPostById(int id);
-        Task AddPost(Post entity);
-        Task UpdatePost(Post entity);
-        Task DeletePost(Post entity);
+        Task<List<T>> getAll();
+        Task<T> getById(int id);
+        Task<T> Add(T entity);
+        Task<T> Update(T entity);
+        Task<T> Delete(T entity);
     }
 }

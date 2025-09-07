@@ -1,6 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using SocialMediaPlatformBackend.Data;
 using SocialMediaPlatformBackend.Data.DAO;
 using SocialMediaPlatformBackend.Data.DTO;
 using SocialMediaPlatformBackend.Models;
@@ -11,30 +9,33 @@ namespace SocialMediaPlatformBackend.Controllers
     [ApiController]
     public class PostController : ControllerBase
     {
-        private readonly AppDbContext _context;
         private readonly ILogger<PostController> _logger;
-        private readonly IPostRepository _postRepository;
-        public PostController(AppDbContext context, IPostRepository postRepository, ILogger<PostController> logger)
+        private readonly IRepository<Post> _postRepository;
+        public PostController(IRepository<Post> postRepository, ILogger<PostController> logger)
         {
-            _context = context;
             _postRepository = postRepository;
             _logger = logger;
         }
 
         [HttpGet]
-        public async Task<IActionResult> Get(string? Order)
+        public async Task<IActionResult> Get([FromQuery] string? order)
         {
-            IEnumerable<Post> repoPost = await _postRepository.getAllPosts();
+            IEnumerable<Post> repoPost = await _postRepository.getAll();
+
+            if (order?.ToLower() == "asc")
+            {
+                repoPost = repoPost.OrderBy(p => p.CreatedAt);
+            }
 
             IEnumerable<PostDTO> dtoPosts = from b in repoPost
                                             select new PostDTO()
                                             {
-                                                Post_id = b.PostId,
-                                                content = b.Content,
-                                                image_url = b.ImageUrl,
-                                                created_at = b.CreatedAt,
-                                                likes_count = b.LikesCount,
-                                                comments_count = b.CommentsCount,
+                                                PostId = b.PostId,
+                                                Content = b.Content,
+                                                ImageUrl = b.ImageUrl,
+                                                CreatedAt = b.CreatedAt,
+                                                LikesCount = b.LikesCount,
+                                                CommentsCount = b.CommentsCount,
                                             };
             return Ok(dtoPosts);
         }
@@ -42,50 +43,62 @@ namespace SocialMediaPlatformBackend.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id)
         {
-            Post? post = await _postRepository.getPostById(id);
-            return Ok(post);
+            Post? post = await _postRepository.getById(id);
+            if (post == null)
+            {
+                return NotFound();
+            }
+            PostDTO postDTO = new PostDTO()
+            {
+                PostId = post.PostId,
+                Content = post.Content,
+                ImageUrl = post.ImageUrl,
+                CreatedAt = post.CreatedAt,
+                LikesCount = post.LikesCount,
+                CommentsCount = post.CommentsCount,
+            };
+
+            return Ok(postDTO);
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] Post post)
+        public async Task<IActionResult> Post([FromBody] PostDTO postDTO)
         {
-
-            _logger.LogInformation("Received Post: {@Post}", post);
-            Post newPost = new Post
+            Post post = new Post
             {
-                //Test if Id is auto- incremented
-                //PostId = 1,
-                Content = "Hello, world! This is my Second post.",
-                ImageUrl = "https://example.com/posts/first_post.jpg",
+                Content = postDTO.Content,
+                ImageUrl = postDTO.ImageUrl,
                 CreatedAt = DateTime.Now,
-                UpdatedAt = DateTime.Now,
                 LikesCount = 0,
                 CommentsCount = 0,
-                IsActive = true,
-                //Test ProfileId is required
-                ProfileId = 1
+                IsActive = true
             };
-            await _context.Posts.AddAsync(newPost);
-            await _context.SaveChangesAsync();
+            await _postRepository.Add(post);
 
-            return Ok();
+            return CreatedAtAction(nameof(Get), new { id = post.PostId }, postDTO);
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Put(int id, [FromBody] string value)
+        public async Task<IActionResult> Put(int id, [FromBody] PostDTO postDTO)
         {
-            // Here you would typically update the post in the database
-            await _context.Posts.Where(p => p.PostId == id).ForEachAsync(p => p.Content = value);
-            await _context.SaveChangesAsync();
-            return Ok(await _context.Posts.ToListAsync());
+            Post post = new Post
+            {
+                PostId = id,
+                Content = postDTO.Content,
+                ImageUrl = postDTO.ImageUrl,
+            };
+            await _postRepository.Update(post);
+
+            return Ok();
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeletePost(int id)
         {
-            // Here you would typically delete the post from the database
-            _context.Posts.Remove(new Models.Post { PostId = id });
-            await _context.SaveChangesAsync();
+            Post post = await _postRepository.getById(id);
+            if (post == null) return NotFound();
+
+            await _postRepository.Delete(post);
             return Ok();
         }
     }
