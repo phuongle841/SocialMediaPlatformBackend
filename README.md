@@ -1,4 +1,6 @@
 Architecture:
 - Repository ✓
 - Unit of work
-- Authentication.
+- Set up for testing
+- Authentication
+- Post suggestion algorithm

@@ -1,7 +1,6 @@
 using Microsoft.EntityFrameworkCore;
+using SocialMediaPlatformBackend.Configurations;
 using SocialMediaPlatformBackend.Data;
-using SocialMediaPlatformBackend.Data.DAO;
-using SocialMediaPlatformBackend.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,8 +13,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-
-builder.Services.AddScoped<IRepository<Post>, PostRepository>();
+builder.Services.AddCustomServices();
 
 var app = builder.Build();
 

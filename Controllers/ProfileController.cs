@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using SocialMediaPlatformBackend.Data;
+using SocialMediaPlatformBackend.Data.DAO;
 
 namespace SocialMediaPlatformBackend.Controllers
 {
@@ -10,17 +10,60 @@ namespace SocialMediaPlatformBackend.Controllers
     {
         private readonly AppDbContext _context;
         private readonly ILogger<ProfileController> _logger;
-        public ProfileController(AppDbContext context, ILogger<ProfileController> logger)
+        private readonly IRepository<Profile> _profileRepository;
+        public ProfileController(AppDbContext context, ILogger<ProfileController> logger, IRepository<Profile> profileRepository)
         {
             _context = context;
             _logger = logger;
+            _profileRepository = profileRepository;
         }
 
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            var profiles = await _context.Profiles.ToListAsync();
+            var profiles = await _profileRepository.getAll();
+
             return Ok(profiles);
+        }
+        [HttpGet("{id}")]
+        public async Task<IActionResult> Get(int id)
+        {
+            var profile = await _profileRepository.getById(id);
+            if (profile == null)
+            {
+                return NotFound();
+            }
+            return Ok(profile);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Post([FromBody] Profile profile)
+        {
+            var createdProfile = await _profileRepository.Add(profile);
+            return CreatedAtAction(nameof(Get), new { id = createdProfile.ProfileId }, createdProfile);
+        }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Put(int id, [FromBody] Profile profile)
+        {
+            var updatedProfile = await _profileRepository.Update(profile);
+            if (updatedProfile == null)
+            {
+                return NotFound();
+            }
+            return NoContent();
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var profile = await _profileRepository.getById(id);
+            if (profile == null)
+            {
+                return NotFound();
+            }
+            await _profileRepository.Delete(profile);
+            return NoContent();
         }
     }
 }
