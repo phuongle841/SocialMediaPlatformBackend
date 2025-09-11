@@ -4,7 +4,9 @@
 
 This is the **Back-End REST API** for a Social Media App, built with [C#](https://learn.microsoft.com/en-us/dotnet/csharp/) and [ASP.NET Core](https://learn.microsoft.com/en-us/aspnet/core/). It powers the core features of the platform, such as user authentication, post creation, commenting, and real-time notifications.
 
+
 ---
+## 👉 Front-End: [Here](https://github.com/phuongle841/SocialMediaPlatformFrontend)
 
 ## 📁 Project Structure
 
