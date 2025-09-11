@@ -1,84 +1,139 @@
-Architecture:
-- Repository ✓
-- Set up for testing
-- Unit of work
-- Authentication
-- CORS
-- Post suggestion algorithm
-- SignalR
+---
 
+# 🛠️ Back End - Social Media API
 
-# Project Title
+This is the **Back-End REST API** for a Social Media App, built with [C#](https://learn.microsoft.com/en-us/dotnet/csharp/) and [ASP.NET Core](https://learn.microsoft.com/en-us/aspnet/core/). It powers the core features of the platform, such as user authentication, post creation, commenting, and real-time notifications.
 
-Replicate of a functional social platform.
+---
 
-This is a C# .net doomscrolling application build for who want to waste their life (˶ᵔ ᵕ ᵔ˶)
+## 📁 Project Structure
 
-# Table of Content
+```
+backend/
+├── Properties/                  # Project properties and settings
+├── Configuration/              # Service configs (DB, JWT, CORS)
+├── Controller/                 # API endpoints
+├── Data/                       # DbContext, DAOs, DTOs
+├── Migrations/                 # EF Core migrations
+├── Models/                     # Entity models
+└── Program.cs                  # Application entry point
 
-- [Installation](#installation)
-- [Usage](#usage)
-- [Features](#features)
-- [Contributing](#contributing)
-- [License](#license)
+Test/
+├── Controller/                 # Controller unit tests
+└── Repository/                 # Repository unit tests
+```
 
+---
 
+## 🚀 Getting Started
 
-## Installation
-
-Install my-project with npm
+### 1. Clone the Repository
 
 ```bash
-  npm install my-project
-  cd my-project
+git clone git@github.com:your-username/social-media-backend.git
+cd backend
 ```
-    
-Include:
-- Visual Studio 2022 or later
-- .NET 6.0 SDK or later
-- SQL Server 2019 or later
 
-## Features
+### 2. Install Dependencies
 
-- Light/dark mode toggle
-- User authentication
-- Fullscreen mode
-- Cross platform
+Make sure you have the .NET SDK installed.
 
+```bash
+dotnet restore
+```
 
-## Contributing
+### 3. Set Up Environment Variables
 
-Contributions are always welcome!
+Create a `secrets.json` or configure your environment as needed. For example:
 
-Please open a pull request or an issue.
+```json
+{
+  "ConnectionStrings": {
+    "DefaultConnection": "YourDatabaseConnectionString"
+  },
+  "Jwt": {
+    "Key": "YourJWTSecretKey",
+    "Issuer": "YourIssuer",
+    "Audience": "YourAudience"
+  }
+}
+```
 
+> Alternatively, use `appsettings.Development.json` or `User Secrets` in .NET Core.
 
-## License
+### 4. Run the Application
 
-MIT License
+```bash
+dotnet run
+```
 
-Copyright (c) [2025] [LeMinhPhuong]
+The API will be available at: [http://localhost:5000](http://localhost:5000)
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+---
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+## 🔑 Features
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-## Acknowledgements
+* 🔐 **JWT-based Authentication**
+* 📝 **User Registration & Login**
+* 🖼️ **Post Creation, Editing, Deletion**
+* 💬 **Commenting & Likes**
+* 🧑‍🤝‍🧑 **Follow/Unfollow Users**
+* 📡 **Real-Time Notifications** (via SignalR)
+* 🔒 **Role-Based Access Control**
 
- - [Awesome Readme Templates](https://awesomeopensource.com/project/elangosundar/awesome-README-templates)
- - [Awesome README](https://github.com/matiassingers/awesome-readme)
- - [How to write a Good readme](https://bulldogjob.com/news/449-how-to-write-a-good-readme-for-your-github-project)
+---
 
+## 🧹 Tech Stack
+
+* **C#**
+* **ASP.NET Core**
+* **Entity Framework Core**
+* **SQL Server**
+* **JWT Authentication**
+* **SignalR** (for real-time communication)
+
+---
+
+## 🧪 Testing
+
+* ✅ **Unit Tests** written with `xUnit`
+* 📦 Use Visual Studio **Test Explorer** or run:
+
+```bash
+dotnet test
+```
+
+---
+
+## 🛠️ Environment Variables
+
+Set the following environment variables or define them in your config file:
+
+```
+ConnectionStrings__DefaultConnection=YourDatabaseConnectionString
+Jwt__Key=YourJWTSecretKey
+Jwt__Issuer=YourIssuer
+Jwt__Audience=YourAudience
+```
+
+> For development, you can also use `appsettings.Development.json` or .NET User Secrets.
+
+---
+
+## 📌 To Do / Future Improvements
+
+* [ ] Enable and configure CORS properly
+* [ ] Implement post suggestion algorithm
+* [ ] Add full integration of SignalR for real-time features
+* [ ] Add Swagger documentation
+* [ ] Improve error handling and validation responses
+
+---
+
+## 🤝 Contribution
+
+Currently not open for contributions, but suggestions are welcome! Feel free to open an issue if you have ideas or feedback.
+
+---
+
+Let me know if you want this as a downloadable `.md` file or need a version tailored for public repositories (e.g., with license and badges).
