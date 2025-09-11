@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Serilog;
 using SocialMediaPlatformBackend.Data.DAO;
 using SocialMediaPlatformBackend.Data.DTO;
 using SocialMediaPlatformBackend.Models;
@@ -21,7 +22,7 @@ namespace SocialMediaPlatformBackend.Controllers
         public async Task<IActionResult> Get([FromQuery] string? order)
         {
             IEnumerable<Post> repoPost = await _postRepository.getAll();
-
+            Log.Information("repoPost count: {@Count}", repoPost);
             if (order?.ToLower() == "asc")
             {
                 repoPost = repoPost.OrderBy(p => p.CreatedAt);
