@@ -1,9 +1,14 @@
 using Microsoft.EntityFrameworkCore;
+using Serilog;
 using SocialMediaPlatformBackend.Configurations;
 using SocialMediaPlatformBackend.Data;
 
 var builder = WebApplication.CreateBuilder(args);
+Log.Logger = new LoggerConfiguration()
+        .WriteTo.Console()
+        .CreateLogger();
 
+builder.Services.AddSerilog();
 // Add services to the container.
 
 builder.Services.AddControllers();
@@ -14,6 +19,8 @@ builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddCustomServices();
+
+
 
 var app = builder.Build();
 

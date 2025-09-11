@@ -19,7 +19,7 @@ namespace SocialMediaPlatformBackend.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Get()
+        public async Task<ActionResult<IEnumerable<Profile>>> Get()
         {
             var profiles = await _profileRepository.getAll();
 
