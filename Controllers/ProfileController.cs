@@ -21,14 +21,14 @@ namespace SocialMediaPlatformBackend.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Profile>>> Get()
         {
-            var profiles = await _profileRepository.getAll();
+            var profiles = await _profileRepository.GetAll();
 
             return Ok(profiles);
         }
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id)
         {
-            var profile = await _profileRepository.getById(id);
+            var profile = await _profileRepository.GetById(id);
             if (profile == null)
             {
                 return NotFound();
@@ -57,7 +57,7 @@ namespace SocialMediaPlatformBackend.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            var profile = await _profileRepository.getById(id);
+            var profile = await _profileRepository.GetById(id);
             if (profile == null)
             {
                 return NotFound();

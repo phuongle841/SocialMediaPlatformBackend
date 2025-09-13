@@ -124,7 +124,8 @@ Jwt__Audience=YourAudience
 
 ## 📌 To Do / Future Improvements
 
-* [ ] Enable and configure CORS properly
+* [ ] Add pagination for posts and comments
+* [✓] Enable and configure CORS properly
 * [ ] Implement post suggestion algorithm
 * [ ] Add full integration of SignalR for real-time features
 * [ ] Add Swagger documentation

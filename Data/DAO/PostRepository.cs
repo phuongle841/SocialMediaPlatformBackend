@@ -3,7 +3,7 @@ using SocialMediaPlatformBackend.Models;
 
 namespace SocialMediaPlatformBackend.Data.DAO
 {
-    public class PostRepository : IRepository<Post>
+    public class PostRepository : IPostRepository
     {
         private readonly AppDbContext _dbContext;
         private readonly ILogger<PostRepository> _logger;
@@ -33,13 +33,13 @@ namespace SocialMediaPlatformBackend.Data.DAO
         }
 
 
-        public async Task<List<Post>> getAll()
+        public async Task<List<Post>> GetAll()
         {
             List<Post> posts = await _dbContext.Posts.ToListAsync();
             return posts;
         }
 
-        public async Task<Post> getById(int id)
+        public async Task<Post> GetById(int id)
         {
             try
             {

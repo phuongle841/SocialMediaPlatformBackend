@@ -1,6 +1,6 @@
 ﻿namespace SocialMediaPlatformBackend.Data.DAO
 {
-    public class ProfileRepository : IRepository<Profile>
+    public class ProfileRepository : IProfileRepository
     {
         private readonly AppDbContext _appDbContext;
         private readonly ILogger<ProfileRepository> _logger;
@@ -29,13 +29,13 @@
             return entity;
         }
 
-        public Task<List<Profile>> getAll()
+        public Task<List<Profile>> GetAll()
         {
             List<Profile> profiles = _appDbContext.Profiles.ToList();
             return Task.FromResult(profiles);
         }
 
-        public Task<Profile> getById(int id)
+        public Task<Profile> GetById(int id)
         {
             try
             {
