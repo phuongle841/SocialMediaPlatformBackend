@@ -1,5 +1,4 @@
 ﻿using SocialMediaPlatformBackend.Data.DAO;
-using SocialMediaPlatformBackend.Models;
 
 namespace SocialMediaPlatformBackend.Configurations
 {
@@ -9,8 +8,8 @@ namespace SocialMediaPlatformBackend.Configurations
         {
             // Add custom services here
             // services.AddScoped<IYourService, YourServiceImplementation>();
-            services.AddScoped<IRepository<Profile>, ProfileRepository>();
-            services.AddScoped<IRepository<Post>, PostRepository>();
+            services.AddScoped<IProfileRepository, ProfileRepository>();
+            services.AddScoped<IPostRepository, PostRepository>();
             return services;
         }
     }

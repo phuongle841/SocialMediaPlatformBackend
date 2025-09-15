@@ -10,17 +10,26 @@ namespace SocialMediaPlatformBackend.Controllers
     public class PostController : ControllerBase
     {
         private readonly ILogger<PostController> _logger;
-        private readonly IRepository<Post> _postRepository;
-        public PostController(IRepository<Post> postRepository, ILogger<PostController> logger)
+        private readonly IPostRepository _postRepository;
+        public PostController(IPostRepository postRepository, ILogger<PostController> logger)
         {
             _postRepository = postRepository;
             _logger = logger;
         }
 
         [HttpGet]
-        public async Task<IActionResult> Get([FromQuery] string? order)
+        public async Task<IActionResult> Get([FromQuery] string? order, CancellationToken cancellationToken)
         {
-            IEnumerable<Post> repoPost = await _postRepository.GetAll();
+            IEnumerable<Post> repoPost;
+            try
+            {
+                repoPost = await _postRepository.GetAll();
+            }
+            catch (Exception)
+            {
+                _logger.LogError("An error occurred while retrieving posts.");
+                throw;
+            }
             if (order?.ToLower() == "asc")
             {
                 repoPost = repoPost.OrderBy(p => p.CreatedAt);
@@ -72,7 +81,7 @@ namespace SocialMediaPlatformBackend.Controllers
                 CommentsCount = 0,
                 IsActive = true
             };
-            await _postRepository.Add(post);
+            Post addedPost = await _postRepository.Add(post);
 
             return CreatedAtAction(nameof(Get), new { id = post.PostId }, postDTO);
         }
@@ -88,7 +97,7 @@ namespace SocialMediaPlatformBackend.Controllers
             };
             await _postRepository.Update(post);
 
-            return Ok();
+            return NoContent();
         }
 
         [HttpDelete("{id}")]
@@ -98,7 +107,7 @@ namespace SocialMediaPlatformBackend.Controllers
             if (post == null) return NotFound();
 
             await _postRepository.Delete(post);
-            return Ok();
+            return NoContent();
         }
     }
 }

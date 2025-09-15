@@ -10,8 +10,8 @@ namespace SocialMediaPlatformBackend.Controllers
     {
         private readonly AppDbContext _context;
         private readonly ILogger<ProfileController> _logger;
-        private readonly IRepository<Profile> _profileRepository;
-        public ProfileController(AppDbContext context, ILogger<ProfileController> logger, IRepository<Profile> profileRepository)
+        private readonly IProfileRepository _profileRepository;
+        public ProfileController(AppDbContext context, ILogger<ProfileController> logger, IProfileRepository profileRepository)
         {
             _context = context;
             _logger = logger;
