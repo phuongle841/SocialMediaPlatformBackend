@@ -40,12 +40,12 @@ namespace SocialMediaPlatformBackend.Data.DAO
             return posts;
         }
 
-        public async Task<Post> GetById(int id)
+        public Task<Post> GetById(int id)
         {
             try
             {
-                Post post = await _dbContext.Posts.FindAsync(id);
-                return post;
+                Post post = _dbContext.Posts.Find(id);
+                return Task.FromResult(post);
             }
             catch (Exception e)
             {

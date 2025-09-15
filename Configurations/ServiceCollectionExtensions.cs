@@ -10,6 +10,7 @@ namespace SocialMediaPlatformBackend.Configurations
             // services.AddScoped<IYourService, YourServiceImplementation>();
             services.AddScoped<IProfileRepository, ProfileRepository>();
             services.AddScoped<IPostRepository, PostRepository>();
+            services.AddScoped<ICommentRepository, CommentRepository>();
             return services;
         }
     }
