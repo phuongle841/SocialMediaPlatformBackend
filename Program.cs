@@ -26,7 +26,9 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+builder.Services.AddAutoMapper(cfg => { }, typeof(Program));
 builder.Services.AddCustomServices();
+
 
 var app = builder.Build();
 app.UseCors(MyAllowSpecificOrigins);

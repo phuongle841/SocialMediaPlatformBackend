@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using SocialMediaPlatformBackend.Data.DAO;
 using SocialMediaPlatformBackend.Data.DTO;
 using SocialMediaPlatformBackend.Models;
@@ -11,19 +12,21 @@ namespace SocialMediaPlatformBackend.Controllers
     {
         private readonly ILogger<PostController> _logger;
         private readonly IPostRepository _postRepository;
-        public PostController(IPostRepository postRepository, ILogger<PostController> logger)
+        private readonly IMapper _mapper;
+        public PostController(IPostRepository postRepository, ILogger<PostController> logger, IMapper mapper)
         {
             _postRepository = postRepository;
             _logger = logger;
+            _mapper = mapper;
         }
 
         [HttpGet]
         public async Task<IActionResult> Get([FromQuery] string? order, CancellationToken cancellationToken)
         {
-            IEnumerable<Post> repoPost;
+            IEnumerable<Post> posts;
             try
             {
-                repoPost = await _postRepository.GetAll();
+                posts = await _postRepository.GetAll();
             }
             catch (Exception)
             {
@@ -32,20 +35,12 @@ namespace SocialMediaPlatformBackend.Controllers
             }
             if (order?.ToLower() == "asc")
             {
-                repoPost = repoPost.OrderBy(p => p.CreatedAt);
+                posts = posts.OrderBy(p => p.CreatedAt);
             }
+            IEnumerable<PostDTO> postDTO = from a in posts
+                                           select _mapper.Map<PostDTO>(a);
 
-            IEnumerable<PostDTO> dtoPosts = from b in repoPost
-                                            select new PostDTO()
-                                            {
-                                                PostId = b.PostId,
-                                                Content = b.Content,
-                                                ImageUrl = b.ImageUrl,
-                                                CreatedAt = b.CreatedAt,
-                                                LikesCount = b.LikesCount,
-                                                CommentsCount = b.CommentsCount,
-                                            };
-            return Ok(dtoPosts);
+            return Ok(postDTO);
         }
 
         [HttpGet("{id}")]
@@ -56,17 +51,8 @@ namespace SocialMediaPlatformBackend.Controllers
             {
                 return NotFound();
             }
-            PostDTO postDTO = new PostDTO()
-            {
-                PostId = post.PostId,
-                Content = post.Content,
-                ImageUrl = post.ImageUrl,
-                CreatedAt = post.CreatedAt,
-                LikesCount = post.LikesCount,
-                CommentsCount = post.CommentsCount,
-            };
 
-            return Ok(postDTO);
+            return Ok(post);
         }
 
         [HttpPost]
