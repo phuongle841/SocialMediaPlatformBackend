@@ -1,4 +1,7 @@
-﻿namespace SocialMediaPlatformBackend.Data.DAO
+﻿using Microsoft.EntityFrameworkCore;
+using SocialMediaPlatformBackend.Models;
+
+namespace SocialMediaPlatformBackend.Data.DAO
 {
     public class ProfileRepository : IProfileRepository
     {
@@ -31,7 +34,8 @@
 
         public Task<List<Profile>> GetAll()
         {
-            List<Profile> profiles = _appDbContext.Profiles.ToList();
+            List<Profile> profiles = _appDbContext.Profiles.Include(p => p.Posts).ToList();
+
             return Task.FromResult(profiles);
         }
 
@@ -51,12 +55,12 @@
 
         public async Task<Profile> Update(Profile entity)
         {
-            Profile exsitingProfile = _appDbContext.Profiles.Find(entity.ProfileId);
-            if (exsitingProfile == null)
+            Profile? existingProfile = _appDbContext.Profiles.Find(entity.ProfileId);
+            if (existingProfile == null)
             {
                 return null;
             }
-            _appDbContext.Entry(exsitingProfile).CurrentValues.SetValues(entity);
+            _appDbContext.Entry(existingProfile).CurrentValues.SetValues(entity);
             await _appDbContext.SaveChangesAsync();
             return entity;
         }

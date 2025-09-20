@@ -1,4 +1,6 @@
-﻿namespace SocialMediaPlatformBackend.Data.DAO
+﻿using SocialMediaPlatformBackend.Models;
+
+namespace SocialMediaPlatformBackend.Data.DAO
 {
     public interface IProfileRepository : IRepository<Profile>
     {

@@ -36,22 +36,32 @@ namespace SocialMediaPlatformBackend.Data.DAO
 
         public async Task<List<Post>> GetAll()
         {
-            List<Post> posts = await _dbContext.Posts.ToListAsync();
+            List<Post> posts;
+            try
+            {
+                posts = await _dbContext.Posts.ToListAsync();
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "An error occurred while retrieving all posts");
+                throw;
+            }
             return posts;
         }
 
-        public Task<Post> GetById(int id)
+        public async Task<Post> GetById(int id)
         {
+            Post post;
             try
             {
-                Post post = _dbContext.Posts.Find(id);
-                return Task.FromResult(post);
+                post = await _dbContext.Posts.FindAsync(id);
             }
             catch (Exception e)
             {
                 _logger.LogError(e, "An error occurred while retrieving the post with ID {PostId}", id);
                 throw;
             }
+            return post;
         }
 
         public async Task<Post> Update(Post entity)

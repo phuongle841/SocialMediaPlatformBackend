@@ -40,7 +40,7 @@ namespace SocialMediaPlatformBackend.Controllers
             IEnumerable<PostDTO> postDTO = from a in posts
                                            select _mapper.Map<PostDTO>(a);
 
-            return Ok(postDTO);
+            return Ok(posts);
         }
 
         [HttpGet("{id}")]
@@ -52,7 +52,7 @@ namespace SocialMediaPlatformBackend.Controllers
                 return NotFound();
             }
 
-            return Ok(post);
+            return Ok(_mapper.Map<PostDTO>(post));
         }
 
         [HttpPost]
@@ -65,7 +65,9 @@ namespace SocialMediaPlatformBackend.Controllers
                 CreatedAt = DateTime.Now,
                 LikesCount = 0,
                 CommentsCount = 0,
-                IsActive = true
+                IsActive = true,
+                ProfileId = postDTO.ProfileId,
+                Profile = null!
             };
             Post addedPost = await _postRepository.Add(post);
 
@@ -80,6 +82,8 @@ namespace SocialMediaPlatformBackend.Controllers
                 PostId = id,
                 Content = postDTO.Content,
                 ImageUrl = postDTO.ImageUrl,
+                ProfileId = 1,
+                Profile = null!
             };
             await _postRepository.Update(post);
 

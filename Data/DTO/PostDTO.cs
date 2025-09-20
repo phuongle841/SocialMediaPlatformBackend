@@ -8,5 +8,6 @@
         public DateTime CreatedAt { get; set; }
         public int LikesCount { get; set; }
         public int CommentsCount { get; set; }
+        public int? ProfileId { get; set; }
     }
 }

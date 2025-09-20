@@ -3,8 +3,8 @@
     public class User
     {
         public int Id { get; set; }
-        public string Email { get; set; }
-        public string HashedPassword { get; set; }
-        public int ProfileId { get; set; }
+        public required string Email { get; set; }
+        public required string HashedPassword { get; set; }
+        public required int ProfileId { get; set; }
     }
 }

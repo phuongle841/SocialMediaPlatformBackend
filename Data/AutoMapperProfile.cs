@@ -5,6 +5,7 @@
         public AutoMapperProfile()
         {
             CreateMap<DTO.PostDTO, Models.Post>().ReverseMap();
+            CreateMap<DTO.ProfileDTO, Models.Profile>().ReverseMap();
         }
     }
 }
