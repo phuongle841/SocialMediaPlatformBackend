@@ -27,7 +27,10 @@ namespace SocialMediaPlatformBackend.Controllers
 
             return Ok(dtoProfiles);
         }
+
         [HttpGet("{id}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> Get(int id)
         {
             var profile = await _profileRepository.GetById(id);

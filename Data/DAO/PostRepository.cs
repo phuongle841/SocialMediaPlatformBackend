@@ -16,7 +16,6 @@ namespace SocialMediaPlatformBackend.Data.DAO
         public async Task<Post> Add(Post entity)
         {
             var result = _dbContext.Posts.AddAsync(entity);
-            _logger.LogInformation("Post added: {@Post}", result);
             await _dbContext.SaveChangesAsync();
             return entity;
         }
@@ -39,7 +38,7 @@ namespace SocialMediaPlatformBackend.Data.DAO
             List<Post> posts;
             try
             {
-                posts = await _dbContext.Posts.ToListAsync();
+                posts = await _dbContext.Posts.Include(p => p.Comments).ToListAsync();
             }
             catch (Exception e)
             {

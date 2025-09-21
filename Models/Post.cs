@@ -14,5 +14,9 @@
         // Foreign key to Profile
         public int? ProfileId { get; set; }
         public Profile? Profile { get; set; }
+        // Navigation property for related comments
+        public List<Comment> Comments { get; set; } = new();
+        // Navigation property for related likes
+        public List<Reaction> Reactions { get; set; } = new();
     }
 }

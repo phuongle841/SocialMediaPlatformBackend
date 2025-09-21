@@ -34,6 +34,7 @@ namespace SocialMediaPlatformBackend.Data.DAO
 
         public Task<List<Profile>> GetAll()
         {
+            // this cause circular reference issue, since Post also has a reference(Navigation) to Profile
             List<Profile> profiles = _appDbContext.Profiles.Include(p => p.Posts).ToList();
 
             return Task.FromResult(profiles);

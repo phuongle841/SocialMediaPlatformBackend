@@ -67,7 +67,6 @@ namespace SocialMediaPlatformBackend.Controllers
                 CommentsCount = 0,
                 IsActive = true,
                 ProfileId = postDTO.ProfileId,
-                Profile = null!
             };
             Post addedPost = await _postRepository.Add(post);
 
