@@ -7,7 +7,7 @@
         public DateTime CreatedDate { get; set; }
         public DateTime UpdatedDate { get; set; }
         public required int PostId { get; set; }
-        public required int UserId { get; set; }
+        public required int ProfileId { get; set; }
         // Nullable for top-level comments
         public int ParenCommentId { get; set; }
     }

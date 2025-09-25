@@ -15,7 +15,6 @@
         public bool IsActive { get; set; }
         public DateTime LastLogin { get; set; }
         // Foreign key to User
-        public User? User { get; set; }
         // Navigation property for related posts
         public ICollection<Post> Posts { get; set; } = new List<Post>();
     }

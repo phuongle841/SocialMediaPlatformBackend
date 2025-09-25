@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SocialMediaPlatformBackend.Data.DAO;
 using SocialMediaPlatformBackend.Data.DTO;
@@ -55,6 +56,7 @@ namespace SocialMediaPlatformBackend.Controllers
             return Ok(_mapper.Map<PostDTO>(post));
         }
 
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] PostDTO postDTO)
         {

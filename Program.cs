@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using SocialMediaPlatformBackend.Configurations;
 using SocialMediaPlatformBackend.Data;
@@ -26,12 +27,19 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+
+builder.Services.AddIdentityApiEndpoints<IdentityUser>()
+    .AddEntityFrameworkStores<AppDbContext>();
+
 builder.Services.AddAutoMapper(cfg => { }, typeof(Program));
+builder.Services.AddAuthorization();
+
 builder.Services.AddCustomServices();
 
-
 var app = builder.Build();
+
 app.UseCors(MyAllowSpecificOrigins);
+app.MapIdentityApi<IdentityUser>();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

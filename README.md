@@ -12,13 +12,15 @@ This is the **Back-End REST API** for a Social Media App, built with [C#](https:
 
 ```
 backend/
-├── Properties/                  # Project properties and settings
+├── Properties/                 # Project properties and settings
 ├── Configuration/              # Service configs (DB, JWT, CORS)
 ├── Controller/                 # API endpoints
 ├── Data/                       # DbContext, DAOs, DTOs
 ├── Migrations/                 # EF Core migrations
 ├── Models/                     # Entity models
+├── Services/                   # Abstractions and implementations
 └── Program.cs                  # Application entry point
+
 
 Test/
 ├── Controller/                 # Controller unit tests
@@ -126,7 +128,7 @@ Jwt__Audience=YourAudience
 
 * [ ] Add pagination for posts and comments
 * [✓] Enable and configure CORS properly
-* [ ] Implement post suggestion algorithm
+* [ ] Implement post suggestion algorithm(real time update using SignalR)
 * [ ] Add full integration of SignalR for real-time features
 * [ ] Add Swagger documentation
 * [ ] Improve error handling and validation responses
