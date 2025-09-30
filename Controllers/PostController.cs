@@ -71,7 +71,6 @@ namespace SocialMediaPlatformBackend.Controllers
                 ProfileId = postDTO.ProfileId,
             };
             Post addedPost = await _postRepository.Add(post);
-
             return CreatedAtAction(nameof(Get), new { id = post.PostId }, postDTO);
         }
 

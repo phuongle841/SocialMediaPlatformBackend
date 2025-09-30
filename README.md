@@ -132,6 +132,7 @@ Jwt__Audience=YourAudience
 * [ ] Add full integration of SignalR for real-time features
 * [ ] Add Swagger documentation
 * [ ] Improve error handling and validation responses
+* [ ] Rate limiting and security enhancements
 
 ---
 

@@ -12,7 +12,13 @@ builder.Services.AddCors(options =>
     options.AddPolicy(name: MyAllowSpecificOrigins,
                       policy =>
                       {
+                          // Allow requests from the frontend application
                           policy.WithOrigins("http://localhost:5173")
+                          .AllowAnyHeader()
+                          .AllowAnyMethod();
+
+                          // Allow requests from Swagger UI
+                          policy.WithOrigins("https://localhost:7221")
                           .AllowAnyHeader()
                           .AllowAnyMethod();
                       });
@@ -50,6 +56,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
