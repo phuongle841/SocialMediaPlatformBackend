@@ -186,7 +186,7 @@ namespace SocialMediaPlatformBackend.Migrations
 
                     b.HasIndex("PostId");
 
-                    b.ToTable("Comments");
+                    b.ToTable("Comments", (string)null);
                 });
 
             modelBuilder.Entity("SocialMediaPlatformBackend.Models.Friend", b =>
@@ -212,7 +212,7 @@ namespace SocialMediaPlatformBackend.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Relations");
+                    b.ToTable("Relations", (string)null);
                 });
 
             modelBuilder.Entity("SocialMediaPlatformBackend.Models.Message", b =>
@@ -235,7 +235,7 @@ namespace SocialMediaPlatformBackend.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Messages");
+                    b.ToTable("Messages", (string)null);
                 });
 
             modelBuilder.Entity("SocialMediaPlatformBackend.Models.Notification", b =>
@@ -260,7 +260,7 @@ namespace SocialMediaPlatformBackend.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Notifications");
+                    b.ToTable("Notifications", (string)null);
                 });
 
             modelBuilder.Entity("SocialMediaPlatformBackend.Models.Post", b =>
@@ -299,7 +299,7 @@ namespace SocialMediaPlatformBackend.Migrations
 
                     b.HasIndex("ProfileId");
 
-                    b.ToTable("Posts");
+                    b.ToTable("Posts", (string)null);
                 });
 
             modelBuilder.Entity("SocialMediaPlatformBackend.Models.Profile", b =>
@@ -349,7 +349,7 @@ namespace SocialMediaPlatformBackend.Migrations
 
                     b.HasKey("ProfileId");
 
-                    b.ToTable("Profiles");
+                    b.ToTable("Profiles", (string)null);
                 });
 
             modelBuilder.Entity("SocialMediaPlatformBackend.Models.Reaction", b =>
@@ -376,7 +376,7 @@ namespace SocialMediaPlatformBackend.Migrations
 
                     b.HasIndex("PostId");
 
-                    b.ToTable("Reactions");
+                    b.ToTable("Reactions", (string)null);
                 });
 
             modelBuilder.Entity("SocialMediaPlatformBackend.Models.User", b =>

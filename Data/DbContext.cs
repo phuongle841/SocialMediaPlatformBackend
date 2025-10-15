@@ -1,11 +1,10 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using SocialMediaPlatformBackend.Models;
 
 namespace SocialMediaPlatformBackend.Data
 {
-    public class AppDbContext : IdentityDbContext<IdentityUser>
+    public class AppDbContext : IdentityDbContext<User, Role, string>
     {
         public AppDbContext(DbContextOptions<AppDbContext> options)
             : base(options)
