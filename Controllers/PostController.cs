@@ -21,6 +21,7 @@ namespace SocialMediaPlatformBackend.Controllers
             _mapper = mapper;
         }
 
+        [Authorize(Roles = "User")]
         [HttpGet]
         public async Task<IActionResult> Get([FromQuery] string? order, CancellationToken cancellationToken)
         {

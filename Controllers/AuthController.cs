@@ -2,22 +2,27 @@
 using Microsoft.AspNetCore.Mvc;
 using SocialMediaPlatformBackend.Data.DTO;
 using SocialMediaPlatformBackend.Models;
+using SocialMediaPlatformBackend.Services;
 
 namespace SocialMediaPlatformBackend.Controllers
 {
     public class AuthController : ControllerBase
     {
+
+        // how to generate and validate JWTs for this configuration (e.g., login endpoint + token creation)
+
+
         private readonly ILogger<AuthController> _logger;
         private readonly UserManager<User> _userManager;
         private readonly SignInManager<User> _signInManager;
-        private readonly IConfiguration _configuration;
+        private readonly IJwtService _jwtService;
 
-        public AuthController(ILogger<AuthController> logger, UserManager<User> userManager, SignInManager<User> signInManager, IConfiguration configuration)
+        public AuthController(ILogger<AuthController> logger, UserManager<User> userManager, SignInManager<User> signInManager, IJwtService jwtService)
         {
             _logger = logger;
             _userManager = userManager;
             _signInManager = signInManager;
-            _configuration = configuration;
+            _jwtService = jwtService;
         }
 
         // Implement registration, login, and other authentication-related actions here
@@ -32,26 +37,36 @@ namespace SocialMediaPlatformBackend.Controllers
 
 
             var result = await _userManager.CreateAsync(newUser, user.Password);
-            if (result.Succeeded)
+            if (!result.Succeeded)
             {
-                return Ok("User registered successfully");
+                return BadRequest(result.Errors);
             }
-            return BadRequest(result.Errors);
+            await _userManager.AddToRoleAsync(newUser, "User");
+
+            return Ok("User registered successfully");
         }
 
         [HttpPost("login")]
-        public async Task<IActionResult> Login([FromBody] UserDTO user)
+        public async Task<IActionResult> Login([FromBody] UserDTO request)
         {
-            var result = await _signInManager.PasswordSignInAsync(user.UserName, user.Password, false, false);
-
-            _logger.LogInformation(result.IsLockedOut.ToString());
-
-            if (result.Succeeded)
+            var user = await _userManager.FindByNameAsync(request.UserName);
+            if (user == null)
             {
-                return Ok("User logged in successfully");
+                return Unauthorized("Invalid UserName");
             }
 
-            return Unauthorized();
+            var result = await _signInManager.PasswordSignInAsync(request.UserName, request.Password, false, false);
+            if (!result.Succeeded)
+            {
+                return Unauthorized("Invalid Password");
+            }
+
+            _logger.LogInformation("Success log in");
+
+            var token = await _jwtService.GenerateToken(user);
+
+            return Ok(new { token });
+
         }
     }
 }

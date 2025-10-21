@@ -6,9 +6,9 @@ This is the **Back-End REST API** for a Social Media App, built with [C#](https:
 
 
 ---
-## 👉 Front-End: [Here](https://github.com/phuongle841/SocialMediaPlatformFrontend)
+##  Front-End: [Here](https://github.com/phuongle841/SocialMediaPlatformFrontend)
 
-## 📁 Project Structure
+##  Project Structure
 
 ```
 backend/
@@ -29,7 +29,7 @@ Test/
 
 ---
 
-## 🚀 Getting Started
+##  Getting Started
 
 ### 1. Clone the Repository
 
@@ -75,19 +75,19 @@ The API will be available at: [http://localhost:5000](http://localhost:5000)
 
 ---
 
-## 🔑 Features
+##  Features
 
-* 🔐 **JWT-based Authentication**
-* 📝 **User Registration & Login**
-* 🖼️ **Post Creation, Editing, Deletion**
-* 💬 **Commenting & Likes**
-* 🧑‍🤝‍🧑 **Follow/Unfollow Users**
-* 📡 **Real-Time Notifications** (via SignalR)
-* 🔒 **Role-Based Access Control**
+*  **JWT-based Authentication**
+*  **User Registration & Login**
+*  **Post Creation, Editing, Deletion**
+*  **Commenting & Likes**
+*  **Follow/Unfollow Users**
+*  **Real-Time Notifications** (via SignalR)
+*  **Role-Based Access Control**
 
 ---
 
-## 🧹 Tech Stack
+##  Tech Stack
 
 * **C#**
 * **ASP.NET Core**
@@ -98,10 +98,10 @@ The API will be available at: [http://localhost:5000](http://localhost:5000)
 
 ---
 
-## 🧪 Testing
+##  Testing
 
-* ✅ **Unit Tests** written with `xUnit`
-* 📦 Use Visual Studio **Test Explorer** or run:
+*  **Unit Tests** written with `xUnit`
+*  Use Visual Studio **Test Explorer** or run:
 
 ```bash
 dotnet test
@@ -109,7 +109,7 @@ dotnet test
 
 ---
 
-## 🛠️ Environment Variables
+##  Environment Variables
 
 Set the following environment variables or define them in your config file:
 
@@ -124,7 +124,7 @@ Jwt__Audience=YourAudience
 
 ---
 
-## 📌 To Do / Future Improvements
+##  To Do / Future Improvements
 
 * [ ] Add pagination for posts and comments
 * [✓] Enable and configure CORS properly
@@ -136,7 +136,7 @@ Jwt__Audience=YourAudience
 
 ---
 
-## 🤝 Contribution
+##  Contribution
 
 Currently not open for contributions, but suggestions are welcome! Feel free to open an issue if you have ideas or feedback.
 

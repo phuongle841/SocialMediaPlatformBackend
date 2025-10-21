@@ -15,6 +15,8 @@ namespace SocialMediaPlatformBackend.Configurations
             services.AddScoped<IReactionRepository, ReactionRepository>();
 
             services.AddScoped<IReactionService, ReactionService>();
+
+            services.AddScoped<IJwtService, JwtService>();
             return services;
         }
     }
