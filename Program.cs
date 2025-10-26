@@ -5,6 +5,7 @@ using Microsoft.IdentityModel.Tokens;
 using SocialMediaPlatformBackend.Configurations;
 using SocialMediaPlatformBackend.Data;
 using SocialMediaPlatformBackend.Models;
+using System.IdentityModel.Tokens.Jwt;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -64,10 +65,16 @@ builder.Services.AddAutoMapper(cfg => { }, typeof(Program));
 // Add repository and service dependencies
 builder.Services.AddCustomServices();
 
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear(); // Clear default claims mapping
+JwtSecurityTokenHandler.DefaultOutboundClaimTypeMap.Clear();
+
+builder.Services.AddAuthentication(options =>
+    {
+        options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+        options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+    })
     .AddJwtBearer(jwtOptions =>
     {
-        Console.WriteLine(builder.Configuration["Jwt:Issuer"]);
         jwtOptions.Audience = builder.Configuration["Jwt:Audience"];
         jwtOptions.Authority = null;
         jwtOptions.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
@@ -78,7 +85,9 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidIssuer = builder.Configuration["Jwt:Issuer"],
             ValidAudience = builder.Configuration["Jwt:Audience"],
             IssuerSigningKey = new SymmetricSecurityKey(
-                System.Text.Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]!))
+                System.Text.Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]!)),
+            NameClaimType = JwtRegisteredClaimNames.Sub,
+            RoleClaimType = "role"
         };
     });
 builder.Services.Configure<IdentityOptions>(options =>

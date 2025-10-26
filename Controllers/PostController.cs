@@ -26,6 +26,10 @@ namespace SocialMediaPlatformBackend.Controllers
         public async Task<IActionResult> Get([FromQuery] string? order, CancellationToken cancellationToken)
         {
             IEnumerable<Post> posts;
+
+            var claims = HttpContext.User.Claims.Select(c => new { c.Type, c.Value }).ToList();
+            claims.ForEach(e => _logger.LogInformation(e.Type + " :" + e.Value));
+
             try
             {
                 posts = await _postRepository.GetAll();

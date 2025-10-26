@@ -9,28 +9,32 @@ namespace SocialMediaPlatformBackend.Services
     {
         private readonly IConfiguration _configuration;
         private readonly UserManager<User> _userManager;
+        private readonly ILogger<JwtService> _logger;
 
-        public JwtService(IConfiguration configuration, UserManager<User> userManager)
+        public JwtService(IConfiguration configuration, UserManager<User> userManager, ILogger<JwtService> logger)
         {
             _configuration = configuration;
             _userManager = userManager;
+            _logger = logger;
         }
         public async Task<string> GenerateToken(User user)
         {
             var JwtSettings = _configuration.GetSection("Jwt");
+            _logger.LogInformation(user.Id);
 
             var authClaims = new List<Claim>
             {
                 new Claim(System.IdentityModel.Tokens.Jwt.JwtRegisteredClaimNames.Sub, user.UserName),
                 new Claim(System.IdentityModel.Tokens.Jwt.JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 new Claim(System.IdentityModel.Tokens.Jwt.JwtRegisteredClaimNames.Email, user.Email),
-                new Claim("uid", user.Id)
+                new Claim("uid", user.Id),
+                new Claim("This is the new claim","What name should this be?")
             };
 
             var roles = await _userManager.GetRolesAsync(user);
             foreach (var role in roles)
             {
-                authClaims.Add(new Claim(ClaimTypes.Role, role));
+                authClaims.Add(new Claim("role", role));
             }
 
             var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(JwtSettings["Key"]!));
