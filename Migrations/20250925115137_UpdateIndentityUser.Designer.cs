@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SocialMediaPlatformBackend.Data;
 
@@ -11,9 +12,11 @@ using SocialMediaPlatformBackend.Data;
 namespace SocialMediaPlatformBackend.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250925115137_UpdateIndentityUser")]
+    partial class UpdateIndentityUser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -186,7 +189,7 @@ namespace SocialMediaPlatformBackend.Migrations
 
                     b.HasIndex("PostId");
 
-                    b.ToTable("Comments", (string)null);
+                    b.ToTable("Comments");
                 });
 
             modelBuilder.Entity("SocialMediaPlatformBackend.Models.Friend", b =>
@@ -212,7 +215,7 @@ namespace SocialMediaPlatformBackend.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Relations", (string)null);
+                    b.ToTable("Relations");
                 });
 
             modelBuilder.Entity("SocialMediaPlatformBackend.Models.Message", b =>
@@ -235,7 +238,7 @@ namespace SocialMediaPlatformBackend.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Messages", (string)null);
+                    b.ToTable("Messages");
                 });
 
             modelBuilder.Entity("SocialMediaPlatformBackend.Models.Notification", b =>
@@ -260,7 +263,7 @@ namespace SocialMediaPlatformBackend.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Notifications", (string)null);
+                    b.ToTable("Notifications");
                 });
 
             modelBuilder.Entity("SocialMediaPlatformBackend.Models.Post", b =>
@@ -299,7 +302,7 @@ namespace SocialMediaPlatformBackend.Migrations
 
                     b.HasIndex("ProfileId");
 
-                    b.ToTable("Posts", (string)null);
+                    b.ToTable("Posts");
                 });
 
             modelBuilder.Entity("SocialMediaPlatformBackend.Models.Profile", b =>
@@ -349,7 +352,7 @@ namespace SocialMediaPlatformBackend.Migrations
 
                     b.HasKey("ProfileId");
 
-                    b.ToTable("Profiles", (string)null);
+                    b.ToTable("Profiles");
                 });
 
             modelBuilder.Entity("SocialMediaPlatformBackend.Models.Reaction", b =>
@@ -376,7 +379,7 @@ namespace SocialMediaPlatformBackend.Migrations
 
                     b.HasIndex("PostId");
 
-                    b.ToTable("Reactions", (string)null);
+                    b.ToTable("Reactions");
                 });
 
             modelBuilder.Entity("SocialMediaPlatformBackend.Models.User", b =>

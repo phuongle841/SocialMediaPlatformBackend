@@ -38,7 +38,7 @@ namespace SocialMediaPlatformBackend.Data.DAO
             List<Post> posts;
             try
             {
-                posts = await _dbContext.Posts.Include(p => p.Comments).Include(p => p.Reactions).ToListAsync();
+                posts = await _dbContext.Posts.Include(p => p.Comments).ToListAsync();
             }
             catch (Exception e)
             {

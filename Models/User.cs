@@ -1,10 +1,10 @@
-﻿namespace SocialMediaPlatformBackend.Models
+﻿using Microsoft.AspNetCore.Identity;
+
+namespace SocialMediaPlatformBackend.Models
 {
-    public class User
+    public class User : IdentityUser
     {
-        public int Id { get; set; }
-        public required string Email { get; set; }
-        public required string HashedPassword { get; set; }
-        public required int ProfileId { get; set; }
+        Profile profile { get; set; }
+        Message message { get; set; }
     }
 }

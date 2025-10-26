@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SocialMediaPlatformBackend.Data.DAO;
 using SocialMediaPlatformBackend.Data.DTO;
@@ -20,10 +21,15 @@ namespace SocialMediaPlatformBackend.Controllers
             _mapper = mapper;
         }
 
+        [Authorize(Roles = "User")]
         [HttpGet]
         public async Task<IActionResult> Get([FromQuery] string? order, CancellationToken cancellationToken)
         {
             IEnumerable<Post> posts;
+
+            var claims = HttpContext.User.Claims.Select(c => new { c.Type, c.Value }).ToList();
+            claims.ForEach(e => _logger.LogInformation(e.Type + " :" + e.Value));
+
             try
             {
                 posts = await _postRepository.GetAll();
@@ -55,6 +61,7 @@ namespace SocialMediaPlatformBackend.Controllers
             return Ok(_mapper.Map<PostDTO>(post));
         }
 
+        [Authorize]
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] PostDTO postDTO)
         {
@@ -69,7 +76,6 @@ namespace SocialMediaPlatformBackend.Controllers
                 ProfileId = postDTO.ProfileId,
             };
             Post addedPost = await _postRepository.Add(post);
-
             return CreatedAtAction(nameof(Get), new { id = post.PostId }, postDTO);
         }
 

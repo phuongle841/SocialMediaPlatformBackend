@@ -3,7 +3,6 @@
     public class Notification
     {
         public int Id { get; set; }
-        public required int UserId { get; set; }
         public required NotificationTypes NotificationTypes { get; set; }
         public required int EntityId { get; set; }
         public required bool isRead { get; set; }
