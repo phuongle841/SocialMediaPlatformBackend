@@ -34,7 +34,7 @@ namespace SocialMediaPlatformBackend.Services
             var roles = await _userManager.GetRolesAsync(user);
             foreach (var role in roles)
             {
-                authClaims.Add(new Claim("role", role));
+                authClaims.Add(new Claim(ClaimTypes.Role, role));
             }
 
             var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(JwtSettings["Key"]!));

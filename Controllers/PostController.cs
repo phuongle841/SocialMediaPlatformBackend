@@ -22,6 +22,7 @@ namespace SocialMediaPlatformBackend.Controllers
         }
 
         [Authorize(Roles = "User")]
+        [Authorize(Policy = "CustomPolicy")]
         [HttpGet]
         public async Task<IActionResult> Get([FromQuery] string? order, CancellationToken cancellationToken)
         {
@@ -49,6 +50,7 @@ namespace SocialMediaPlatformBackend.Controllers
             return Ok(posts);
         }
 
+        [Authorize]
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id)
         {

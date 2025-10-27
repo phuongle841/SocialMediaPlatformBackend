@@ -87,7 +87,6 @@ builder.Services.AddAuthentication(options =>
             IssuerSigningKey = new SymmetricSecurityKey(
                 System.Text.Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]!)),
             NameClaimType = JwtRegisteredClaimNames.Sub,
-            RoleClaimType = "role"
         };
     });
 builder.Services.Configure<IdentityOptions>(options =>
@@ -98,7 +97,13 @@ builder.Services.Configure<IdentityOptions>(options =>
     options.Password.RequireUppercase = false;
 });
 
-builder.Services.AddAuthorization();
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("CustomPolicy", policy =>
+    {
+        policy.RequireClaim("This is the new claim", "What name should this be", "What name should this be?");
+    });
+});
 
 var app = builder.Build();
 
