@@ -4,8 +4,8 @@
     public class Friend
     {
         public int Id { get; set; }
-        public required string FollowerId { get; set; }
-        public required string FollowingId { get; set; }
+        public required Profile Follower { get; set; }
+        public required Profile Following { get; set; }
         public DateTime CreateAt { get; set; }
         public FriendStatus Status { get; set; } = FriendStatus.Pending;
     }

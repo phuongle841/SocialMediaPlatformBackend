@@ -24,6 +24,7 @@ namespace SocialMediaPlatformBackend.Controllers
             // Placeholder for getting comments
             return Ok(comments);
         }
+
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id)
         {
@@ -34,12 +35,14 @@ namespace SocialMediaPlatformBackend.Controllers
             }
             return Ok(comment);
         }
+
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] Comment comment)
         {
             var createdComment = await _commentRepository.Add(comment);
             return CreatedAtAction(nameof(Get), new { id = createdComment.Id }, createdComment);
         }
+
         [HttpPut("{id}")]
         public async Task<IActionResult> Put(int id, [FromBody] Comment comment)
         {
@@ -50,6 +53,7 @@ namespace SocialMediaPlatformBackend.Controllers
             }
             return NoContent();
         }
+
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {

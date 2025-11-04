@@ -4,10 +4,10 @@ namespace SocialMediaPlatformBackend.Data.DAO
 {
     public interface IFriendRepository
     {
-        Task<IEnumerable<Friend>> GetAll();
-        Task<Friend> GetById(int id);
-        Task<Friend> Add(Friend user, Friend friend);
-        Task<Friend> Update(Friend user, Friend friend);
-        Task<Friend> Delete(Friend user, Friend friend);
+        Task<IEnumerable<Friend>> GetAll(Profile user);
+        Task<Friend> GetById(Profile user, Profile friend);
+        Task<Friend> Add(Profile user, Profile friend);
+        Task<Friend> Update(Profile user, Profile friend, FriendStatus status);
+        Task<Friend> Delete(Profile user, Profile friend);
     }
 }

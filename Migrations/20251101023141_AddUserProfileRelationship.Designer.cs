@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SocialMediaPlatformBackend.Data;
 
@@ -11,9 +12,11 @@ using SocialMediaPlatformBackend.Data;
 namespace SocialMediaPlatformBackend.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251101023141_AddUserProfileRelationship")]
+    partial class AddUserProfileRelationship
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -173,22 +176,20 @@ namespace SocialMediaPlatformBackend.Migrations
                     b.Property<DateTime>("CreateAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("FollowerProfileId")
-                        .HasColumnType("int");
+                    b.Property<string>("FollowerId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("FollowingProfileId")
-                        .HasColumnType("int");
+                    b.Property<string>("FollowingId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("FollowerProfileId");
-
-                    b.HasIndex("FollowingProfileId");
-
-                    b.ToTable("Friend");
+                    b.ToTable("Relations");
                 });
 
             modelBuilder.Entity("SocialMediaPlatformBackend.Models.Message", b =>
@@ -510,25 +511,6 @@ namespace SocialMediaPlatformBackend.Migrations
                         .HasForeignKey("PostId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("SocialMediaPlatformBackend.Models.Friend", b =>
-                {
-                    b.HasOne("SocialMediaPlatformBackend.Models.Profile", "Follower")
-                        .WithMany()
-                        .HasForeignKey("FollowerProfileId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("SocialMediaPlatformBackend.Models.Profile", "Following")
-                        .WithMany()
-                        .HasForeignKey("FollowingProfileId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Follower");
-
-                    b.Navigation("Following");
                 });
 
             modelBuilder.Entity("SocialMediaPlatformBackend.Models.Post", b =>
