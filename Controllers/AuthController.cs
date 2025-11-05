@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using SocialMediaPlatformBackend.Data.DTO;
 using SocialMediaPlatformBackend.Models;
-using SocialMediaPlatformBackend.Services;
+using SocialMediaPlatformBackend.Services.Interfaces;
 
 namespace SocialMediaPlatformBackend.Controllers
 {

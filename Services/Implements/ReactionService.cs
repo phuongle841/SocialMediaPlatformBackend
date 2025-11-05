@@ -1,7 +1,8 @@
 ﻿using SocialMediaPlatformBackend.Data.DAO;
 using SocialMediaPlatformBackend.Models;
+using SocialMediaPlatformBackend.Services.Interfaces;
 
-namespace SocialMediaPlatformBackend.Services
+namespace SocialMediaPlatformBackend.Services.Implement
 {
 
     public class ReactionService : IReactionService

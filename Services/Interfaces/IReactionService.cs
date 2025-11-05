@@ -1,6 +1,6 @@
 ﻿using SocialMediaPlatformBackend.Models;
 
-namespace SocialMediaPlatformBackend.Services
+namespace SocialMediaPlatformBackend.Services.Interfaces
 {
     public interface IReactionService
     {

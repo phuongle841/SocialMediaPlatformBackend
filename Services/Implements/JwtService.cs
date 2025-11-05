@@ -1,9 +1,10 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using SocialMediaPlatformBackend.Models;
+using SocialMediaPlatformBackend.Services.Interfaces;
 using System.Security.Claims;
 
-namespace SocialMediaPlatformBackend.Services
+namespace SocialMediaPlatformBackend.Services.Implement
 {
     public class JwtService : IJwtService
     {

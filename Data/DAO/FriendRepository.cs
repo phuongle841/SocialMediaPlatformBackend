@@ -40,25 +40,26 @@ namespace SocialMediaPlatformBackend.Data.DAO
         public async Task<IEnumerable<Friend>> GetAll(Profile user)
         {
             IEnumerable<Friend> allRelationship = await _context.Friends.ToListAsync();
-            var detailedRelationships = allRelationship
-                .Select(fr => new Friend
-                {
-                    Id = fr.Id,
-                    Follower = _context.Profiles.Find(fr.Follower.Username)!,
-                    Following = _context.Profiles.Find(fr.Following.Username)!,
-                    CreateAt = fr.CreateAt,
-                    Status = fr.Status
-                });
+            IEnumerable<Friend> detailedRelationships = allRelationship
+                .Where(r => r.Follower.ProfileId == user.ProfileId);
             return detailedRelationships;
         }
 
         public async Task<Friend> GetById(Profile user, Profile friend)
         {
             IEnumerable<Friend> allRelationship = await _context.Friends.ToListAsync();
-            Friend relationship = allRelationship
-                                .Where(fr => fr.Follower.Username == user.Username && fr.Following.Username == friend.Username)
-                                .First();
-            return relationship;
+            try
+            {
+                Friend relationship = allRelationship
+                                .Single(e => e.Follower.ProfileId == user.ProfileId && e.Following.ProfileId == friend.ProfileId);
+                return relationship;
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e.Message);
+                return null;
+            }
+
         }
 
         public async Task<Friend> Update(Profile user, Profile friend, FriendStatus status)
