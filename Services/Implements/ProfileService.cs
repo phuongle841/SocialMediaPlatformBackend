@@ -1,4 +1,5 @@
-﻿using SocialMediaPlatformBackend.Data.DAO;
+﻿using Microsoft.VisualBasic;
+using SocialMediaPlatformBackend.Data.DAO.Interfaces;
 using SocialMediaPlatformBackend.Models;
 using SocialMediaPlatformBackend.Services.Interfaces;
 
@@ -14,26 +15,34 @@ namespace SocialMediaPlatformBackend.Services.Implement
             _profileRepository = profileRepository;
         }
 
-        public Task DeleteAsync(int profileId)
+        public async Task<Profile> AddAsync(Profile profile)
         {
-            throw new NotImplementedException();
+            var newProfile = await _profileRepository.Add(profile);
+            return newProfile;
         }
 
-        public Task<Profile> getAllAsync(int profileId)
+        public async Task DeleteAsync(int profileId)
         {
             throw new NotImplementedException();
+
         }
 
-        public async Task<Profile> getByIdAsync(int profileId)
+        public async Task<List<Profile>> GetAllAsync()
+        {
+            List<Profile> profile = await _profileRepository.GetAll();
+            return profile;
+        }
+
+        public async Task<Profile> GetByIdAsync(int profileId)
         {
             Profile profile = await _profileRepository.GetById(profileId);
             return profile;
         }
 
-        public Task UpdateAsync(int profileId, Profile profile)
+        public async Task<Profile> UpdateAsync(int profileId, Profile profile)
         {
-
-            throw new NotImplementedException();
+            Profile selectedProfile = await _profileRepository.GetById(profileId);
+            return selectedProfile;
         }
     }
 }

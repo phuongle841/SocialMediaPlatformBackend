@@ -1,4 +1,4 @@
-﻿namespace SocialMediaPlatformBackend.Data.DAO
+﻿namespace SocialMediaPlatformBackend.Data.DAO.Interfaces
 {
     public interface IRepository<T> where T : class
     {

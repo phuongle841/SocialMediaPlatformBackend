@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using SocialMediaPlatformBackend.Data.DAO;
+using SocialMediaPlatformBackend.Data.DAO.Interfaces;
 using SocialMediaPlatformBackend.Data.DTO;
 using SocialMediaPlatformBackend.Models;
 
@@ -21,8 +20,6 @@ namespace SocialMediaPlatformBackend.Controllers
             _mapper = mapper;
         }
 
-        [Authorize(Roles = "User")]
-        [Authorize(Policy = "CustomPolicy")]
         [HttpGet]
         public async Task<IActionResult> Get([FromQuery] string? order, CancellationToken cancellationToken)
         {
@@ -44,13 +41,11 @@ namespace SocialMediaPlatformBackend.Controllers
             {
                 posts = posts.OrderBy(p => p.CreatedAt);
             }
-            IEnumerable<PostDTO> postDTO = from a in posts
-                                           select _mapper.Map<PostDTO>(a);
-
-            return Ok(posts);
+            
+            var postDTO = _mapper.Map<IEnumerable<PostDTO>>(posts);
+            return Ok(postDTO);
         }
 
-        [Authorize]
         [HttpGet("{id}")]
         public async Task<IActionResult> Get(int id)
         {
@@ -63,10 +58,10 @@ namespace SocialMediaPlatformBackend.Controllers
             return Ok(_mapper.Map<PostDTO>(post));
         }
 
-        [Authorize]
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] PostDTO postDTO)
         {
+            _logger.LogInformation("Creating a new post with content: {Content}", postDTO);
             Post post = new Post
             {
                 Content = postDTO.Content,
@@ -78,7 +73,7 @@ namespace SocialMediaPlatformBackend.Controllers
                 ProfileId = postDTO.ProfileId,
             };
             Post addedPost = await _postRepository.Add(post);
-            return CreatedAtAction(nameof(Get), new { id = post.PostId }, postDTO);
+            return CreatedAtAction(nameof(Get), new { id = addedPost.PostId }, postDTO);
         }
 
         [HttpPut("{id}")]
@@ -89,9 +84,14 @@ namespace SocialMediaPlatformBackend.Controllers
                 PostId = id,
                 Content = postDTO.Content,
                 ImageUrl = postDTO.ImageUrl,
-                ProfileId = 1,
+                ProfileId = postDTO.ProfileId,
                 Profile = null!
             };
+            var existingPost = await _postRepository.GetById(id);
+            if (existingPost==null)
+            {
+                return NotFound();
+            }
             await _postRepository.Update(post);
 
             return NoContent();

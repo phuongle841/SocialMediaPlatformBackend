@@ -6,14 +6,13 @@ using SocialMediaPlatformBackend.Configurations;
 using SocialMediaPlatformBackend.Data;
 using SocialMediaPlatformBackend.Models;
 using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 
 var builder = WebApplication.CreateBuilder(args);
 
-string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
-
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy(name: MyAllowSpecificOrigins,
+    options.AddDefaultPolicy(
                       policy =>
                       {
                           // Allow requests from the frontend application
@@ -87,6 +86,7 @@ builder.Services.AddAuthentication(options =>
             IssuerSigningKey = new SymmetricSecurityKey(
                 System.Text.Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]!)),
             NameClaimType = JwtRegisteredClaimNames.Sub,
+            RoleClaimType = ClaimTypes.Role,
         };
     });
 builder.Services.Configure<IdentityOptions>(options =>
@@ -95,14 +95,6 @@ builder.Services.Configure<IdentityOptions>(options =>
     options.Password.RequireNonAlphanumeric = false;
     options.Password.RequiredLength = 6;
     options.Password.RequireUppercase = false;
-});
-
-builder.Services.AddAuthorization(options =>
-{
-    options.AddPolicy("CustomPolicy", policy =>
-    {
-        policy.RequireClaim("This is the new claim", "What name should this be", "What name should this be?");
-    });
 });
 
 var app = builder.Build();
@@ -120,7 +112,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 app.UseHttpsRedirection();
-app.UseCors(MyAllowSpecificOrigins);
+app.UseCors();
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapControllers();

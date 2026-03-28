@@ -1,6 +1,6 @@
 ---
 
-# 🛠️ Back End - Social Media API
+# Back End - Social Media API
 
 This is the **Back-End REST API** for a Social Media App, built with [C#](https://learn.microsoft.com/en-us/dotnet/csharp/) and [ASP.NET Core](https://learn.microsoft.com/en-us/aspnet/core/). It powers the core features of the platform, such as user authentication, post creation, commenting, and real-time notifications.
 
@@ -136,6 +136,10 @@ Jwt__Audience=YourAudience
 
 ---
 
+## Current Challenges
+
+- Connect User information between User and Profile tables(currently using UserId as a foreign key, but may need to consider using email or username for better flexibility)
+---
 ##  Contribution
 
 Currently not open for contributions, but suggestions are welcome! Feel free to open an issue if you have ideas or feedback.
