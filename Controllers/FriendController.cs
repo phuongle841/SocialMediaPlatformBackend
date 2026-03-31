@@ -24,7 +24,7 @@ namespace SocialMediaPlatformBackend.Controllers
         [HttpGet("{profileId:int}/friends")]
         public async Task<ActionResult> Get(int profileId)
         {
-            IEnumerable<Friend> relationships = await _friendService.GetAllAsync(profileId);
+            IEnumerable<Relationship> relationships = await _friendService.GetAllAsync(profileId);
             IEnumerable<RelationshipResDTO> relationshipRes = relationships.Select(_mapper.Map<RelationshipResDTO>);
             return Ok(relationshipRes);
         }
@@ -32,7 +32,7 @@ namespace SocialMediaPlatformBackend.Controllers
         [HttpGet("relationship")]
         public async Task<ActionResult> GetById([FromQuery] RelationshipReqDTO reqDTO)
         {
-            Friend relationship = await _friendService.GetById(reqDTO.FollowerId, reqDTO.FollowingId);
+            Relationship relationship = await _friendService.GetById(reqDTO.FollowerId, reqDTO.FollowingId);
             RelationshipResDTO relationshipRes = _mapper.Map<RelationshipResDTO>(relationship);
             if (relationshipRes == null)
             {
@@ -44,7 +44,7 @@ namespace SocialMediaPlatformBackend.Controllers
         [HttpPost]
         public async Task<ActionResult> Post([FromBody] RelationshipReqDTO reqDTO, FriendStatus status)
         {
-            Friend? relationship = await _friendService.AddAsync(reqDTO.FollowerId, reqDTO.FollowingId, status);
+            Relationship? relationship = await _friendService.AddAsync(reqDTO.FollowerId, reqDTO.FollowingId, status);
             if (relationship == null)
             {
                 return BadRequest("Unable to create friendship. One or both profiles may not exist.");
@@ -55,7 +55,7 @@ namespace SocialMediaPlatformBackend.Controllers
         [HttpPut]
         public async Task<ActionResult> Put([FromBody] RelationshipReqDTO reqDTO, FriendStatus status)
         {
-            Friend relationship = await _friendService.UpdateAsync(reqDTO.FollowerId, reqDTO.FollowingId, status);
+            Relationship relationship = await _friendService.UpdateAsync(reqDTO.FollowerId, reqDTO.FollowingId, status);
             if (relationship == null)
             {
                 return NotFound("Relationship not found or cannot be updated.");
@@ -66,7 +66,7 @@ namespace SocialMediaPlatformBackend.Controllers
         [HttpDelete]
         public async Task<ActionResult> Delete([FromBody] RelationshipReqDTO reqDTO)
         {
-            Friend? relationship = await _friendService.DeleteAsync(reqDTO.FollowerId, reqDTO.FollowingId);
+            Relationship? relationship = await _friendService.DeleteAsync(reqDTO.FollowerId, reqDTO.FollowingId);
             if (relationship == null)
             {
                 return NotFound($"Friendship not found between {reqDTO.FollowerId} and {reqDTO.FollowingId}");

@@ -15,9 +15,9 @@ namespace SocialMediaPlatformBackend.Data.DAO
             _logger = logger;
         }
 
-        public async Task<Friend> Add(Profile user, Profile friend, FriendStatus status)
+        public async Task<Relationship> Add(Profile user, Profile friend, FriendStatus status)
         {
-            var friendEntity = new Friend
+            var friendEntity = new Relationship
             {
                 Follower = user,
                 Following = friend,
@@ -29,9 +29,9 @@ namespace SocialMediaPlatformBackend.Data.DAO
             return friendEntity;
         }
 
-        public async Task<Friend> Delete(Profile user, Profile friend)
+        public async Task<Relationship> Delete(Profile user, Profile friend)
         {
-            Friend DeletedRelationship = await GetById(user, friend);
+            Relationship DeletedRelationship = await GetById(user, friend);
             if (DeletedRelationship == null)
             {
                 return null;
@@ -42,17 +42,17 @@ namespace SocialMediaPlatformBackend.Data.DAO
             return DeletedRelationship;
         }
 
-        public async Task<IEnumerable<Friend>> GetAll(Profile user)
+        public async Task<IEnumerable<Relationship>> GetAll(Profile user)
         {
-            IEnumerable<Friend> detailedRelationships = await _context.Friends.Where(f => f.Follower.ProfileId == user.ProfileId).ToListAsync();
+            IEnumerable<Relationship> detailedRelationships = await _context.Friends.Where(f => f.Follower.ProfileId == user.ProfileId).ToListAsync();
             return detailedRelationships;
         }
 
-        public async Task<Friend> GetById(Profile user, Profile friend)
+        public async Task<Relationship> GetById(Profile user, Profile friend)
         {
             try
             {
-                Friend relationship = await _context.Friends.SingleOrDefaultAsync(e => e.Follower.ProfileId == user.ProfileId && e.Following.ProfileId == friend.ProfileId);
+                Relationship relationship = await _context.Friends.SingleOrDefaultAsync(e => e.Follower.ProfileId == user.ProfileId && e.Following.ProfileId == friend.ProfileId);
                 return relationship;
             }
             catch (Exception e)
@@ -63,9 +63,9 @@ namespace SocialMediaPlatformBackend.Data.DAO
 
         }
 
-        public async Task<Friend> Update(Profile user, Profile friend, FriendStatus status)
+        public async Task<Relationship> Update(Profile user, Profile friend, FriendStatus status)
         {
-            Friend updateRelationship = await GetById(user, friend);
+            Relationship updateRelationship = await GetById(user, friend);
             if (updateRelationship == null)
             {
                 return null;
