@@ -24,7 +24,7 @@ namespace SocialMediaPlatformBackend.Data.DAO
                 CreateAt = DateTime.UtcNow,
                 Status = status
             };
-            await _context.Friends.AddAsync(friendEntity);
+            await _context.Relationships.AddAsync(friendEntity);
             await _context.SaveChangesAsync();
             return friendEntity;
         }
@@ -44,7 +44,7 @@ namespace SocialMediaPlatformBackend.Data.DAO
 
         public async Task<IEnumerable<Relationship>> GetAll(Profile user)
         {
-            IEnumerable<Relationship> detailedRelationships = await _context.Friends.Where(f => f.Follower.ProfileId == user.ProfileId).ToListAsync();
+            IEnumerable<Relationship> detailedRelationships = await _context.Relationships.Where(f => f.Follower.ProfileId == user.ProfileId).ToListAsync();
             return detailedRelationships;
         }
 
@@ -52,7 +52,7 @@ namespace SocialMediaPlatformBackend.Data.DAO
         {
             try
             {
-                Relationship relationship = await _context.Friends.SingleOrDefaultAsync(e => e.Follower.ProfileId == user.ProfileId && e.Following.ProfileId == friend.ProfileId);
+                Relationship relationship = await _context.Relationships.SingleOrDefaultAsync(e => e.Follower.ProfileId == user.ProfileId && e.Following.ProfileId == friend.ProfileId);
                 return relationship;
             }
             catch (Exception e)

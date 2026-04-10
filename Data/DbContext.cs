@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using SocialMediaPlatformBackend.Models;
-using System.Reflection.Metadata;
 
 namespace SocialMediaPlatformBackend.Data
 {
