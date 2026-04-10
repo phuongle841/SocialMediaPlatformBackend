@@ -54,7 +54,9 @@ builder.Services.AddSwaggerGen(options =>
 );
 
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"))
+    .UseSeeding((context, _) => context.Seed())
+    .UseAsyncSeeding(async (context, _, cancellationToken) => await context.SeedAsync(cancellationToken)));
 
 builder.Services.AddIdentity<User, Role>()
     .AddEntityFrameworkStores<AppDbContext>()
