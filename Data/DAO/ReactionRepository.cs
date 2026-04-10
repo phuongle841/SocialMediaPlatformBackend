@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using SocialMediaPlatformBackend.Data.DAO.Interfaces;
 using SocialMediaPlatformBackend.Models;
 
 namespace SocialMediaPlatformBackend.Data.DAO

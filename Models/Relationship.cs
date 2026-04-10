@@ -1,7 +1,7 @@
 ﻿namespace SocialMediaPlatformBackend.Models
 {
     // Relationship
-    public class Friend
+    public class Relationship
     {
         public int Id { get; set; }
         public required Profile Follower { get; set; }

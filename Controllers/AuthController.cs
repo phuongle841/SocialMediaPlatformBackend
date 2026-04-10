@@ -10,19 +10,19 @@ namespace SocialMediaPlatformBackend.Controllers
     {
 
         // how to generate and validate JWTs for this configuration (e.g., login endpoint + token creation)
-
-
         private readonly ILogger<AuthController> _logger;
         private readonly UserManager<User> _userManager;
+        private readonly IUserProfileService _userProfileService;
         private readonly SignInManager<User> _signInManager;
         private readonly IJwtService _jwtService;
 
-        public AuthController(ILogger<AuthController> logger, UserManager<User> userManager, SignInManager<User> signInManager, IJwtService jwtService)
+        public AuthController(ILogger<AuthController> logger, UserManager<User> userManager, SignInManager<User> signInManager, IJwtService jwtService, IUserProfileService userProfileService)
         {
             _logger = logger;
             _userManager = userManager;
             _signInManager = signInManager;
             _jwtService = jwtService;
+            _userProfileService = userProfileService;
         }
 
         // Implement registration, login, and other authentication-related actions here
@@ -35,8 +35,17 @@ namespace SocialMediaPlatformBackend.Controllers
                 Email = user.Email
             };
 
-
             var result = await _userManager.CreateAsync(newUser, user.Password);
+
+            try
+            {
+                var ProfileResult = await _userProfileService.AddUserWithProfile(newUser);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e.Message);
+            }
+
             if (!result.Succeeded)
             {
                 return BadRequest(result.Errors);
@@ -61,11 +70,14 @@ namespace SocialMediaPlatformBackend.Controllers
                 return Unauthorized("Invalid Password");
             }
 
-            _logger.LogInformation("Success log in");
 
             var token = await _jwtService.GenerateToken(user);
 
-            return Ok(new { token });
+            return Ok(new
+            {
+                token = String.Join(" ", "Bearer", token),
+                type = "Bearer"
+            });
 
         }
     }

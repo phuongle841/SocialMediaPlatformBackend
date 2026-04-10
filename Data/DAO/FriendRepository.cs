@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using SocialMediaPlatformBackend.Data.DAO.Interfaces;
 using SocialMediaPlatformBackend.Models;
 
 namespace SocialMediaPlatformBackend.Data.DAO
@@ -14,65 +15,65 @@ namespace SocialMediaPlatformBackend.Data.DAO
             _logger = logger;
         }
 
-        public async Task<Friend> Add(Profile user, Profile friend)
+        public async Task<Relationship> Add(Profile user, Profile friend, FriendStatus status)
         {
-            var friendEntity = new Friend
+            var friendEntity = new Relationship
             {
                 Follower = user,
                 Following = friend,
                 CreateAt = DateTime.UtcNow,
-                Status = FriendStatus.Pending
+                Status = status
             };
-            await _context.Friends.AddAsync(friendEntity);
-            _context.SaveChanges();
+            await _context.Relationships.AddAsync(friendEntity);
+            await _context.SaveChangesAsync();
             return friendEntity;
         }
 
-        public async Task<Friend> Delete(Profile user, Profile friend)
+        public async Task<Relationship> Delete(Profile user, Profile friend)
         {
-            Friend DeletedRelationShip = await GetById(user, friend);
+            Relationship DeletedRelationship = await GetById(user, friend);
+            if (DeletedRelationship == null)
+            {
+                return null;
+            }
 
-            _context.Entry(DeletedRelationShip).State = Microsoft.EntityFrameworkCore.EntityState.Deleted;
-            _context.SaveChanges();
-            return DeletedRelationShip;
+            _context.Entry(DeletedRelationship).State = Microsoft.EntityFrameworkCore.EntityState.Deleted;
+            await _context.SaveChangesAsync();
+            return DeletedRelationship;
         }
 
-        public async Task<IEnumerable<Friend>> GetAll(Profile user)
+        public async Task<IEnumerable<Relationship>> GetAll(Profile user)
         {
-            IEnumerable<Friend> allRelationship = await _context.Friends.ToListAsync();
-            IEnumerable<Friend> detailedRelationships = allRelationship
-                .Where(r => r.Follower.ProfileId == user.ProfileId);
+            IEnumerable<Relationship> detailedRelationships = await _context.Relationships.Where(f => f.Follower.ProfileId == user.ProfileId).ToListAsync();
             return detailedRelationships;
         }
 
-        public async Task<Friend> GetById(Profile user, Profile friend)
+        public async Task<Relationship> GetById(Profile user, Profile friend)
         {
-            IEnumerable<Friend> allRelationship = await _context.Friends.ToListAsync();
             try
             {
-                Friend relationship = allRelationship
-                                .Single(e => e.Follower.ProfileId == user.ProfileId && e.Following.ProfileId == friend.ProfileId);
+                Relationship relationship = await _context.Relationships.SingleOrDefaultAsync(e => e.Follower.ProfileId == user.ProfileId && e.Following.ProfileId == friend.ProfileId);
                 return relationship;
             }
             catch (Exception e)
             {
-                _logger.LogError(e.Message);
+                _logger.LogError(e, "Error fetching friendship");
                 return null;
             }
 
         }
 
-        public async Task<Friend> Update(Profile user, Profile friend, FriendStatus status)
+        public async Task<Relationship> Update(Profile user, Profile friend, FriendStatus status)
         {
-            Friend updateRelationShip = await GetById(user, friend);
-            if (updateRelationShip != null)
+            Relationship updateRelationship = await GetById(user, friend);
+            if (updateRelationship == null)
             {
-                updateRelationShip.Status = status;
-                _context.Entry(updateRelationShip).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
-                _context.SaveChanges();
-                return updateRelationShip;
+                return null;
             }
-            return null;
+            updateRelationship.Status = status;
+            _context.Entry(updateRelationship).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+            await _context.SaveChangesAsync();
+            return updateRelationship;
         }
     }
 }

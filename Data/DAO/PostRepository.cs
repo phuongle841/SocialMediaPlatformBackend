@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using SocialMediaPlatformBackend.Data.DAO.Interfaces;
 using SocialMediaPlatformBackend.Models;
 
 namespace SocialMediaPlatformBackend.Data.DAO
@@ -13,27 +14,27 @@ namespace SocialMediaPlatformBackend.Data.DAO
             _logger = logger;
         }
 
-        public async Task<Post> Add(Post entity)
+        public async Task<Post?> Add(Post entity)
         {
-            var result = _dbContext.Posts.AddAsync(entity);
+            await _dbContext.Posts.AddAsync(entity);
             await _dbContext.SaveChangesAsync();
             return entity;
         }
 
-        public async Task<Post> Delete(Post entity)
+        public async Task<Post?> Delete(Post entity)
         {
             var deletedPost = await _dbContext.Posts.FindAsync(entity.PostId);
             if (deletedPost == null)
             {
                 return null;
             }
-            _dbContext.Posts.Remove(deletedPost);
+            _dbContext.Posts.Remove(entity);
             await _dbContext.SaveChangesAsync();
-            return entity;
+            return deletedPost;
         }
 
 
-        public async Task<List<Post>> GetAll()
+        public async Task<List<Post?>> GetAll()
         {
             List<Post> posts;
             try
@@ -48,7 +49,7 @@ namespace SocialMediaPlatformBackend.Data.DAO
             return posts;
         }
 
-        public async Task<Post> GetById(int id)
+        public async Task<Post?> GetById(int id)
         {
             Post post;
             try
@@ -63,7 +64,7 @@ namespace SocialMediaPlatformBackend.Data.DAO
             return post;
         }
 
-        public async Task<Post> Update(Post entity)
+        public async Task<Post?> Update(Post entity)
         {
             Post existingPost = await _dbContext.Posts.FindAsync(entity.PostId);
             if (existingPost == null)

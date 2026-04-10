@@ -162,35 +162,6 @@ namespace SocialMediaPlatformBackend.Migrations
                     b.ToTable("Comments");
                 });
 
-            modelBuilder.Entity("SocialMediaPlatformBackend.Models.Friend", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<DateTime>("CreateAt")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("FollowerProfileId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("FollowingProfileId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Status")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("FollowerProfileId");
-
-                    b.HasIndex("FollowingProfileId");
-
-                    b.ToTable("Friend");
-                });
-
             modelBuilder.Entity("SocialMediaPlatformBackend.Models.Message", b =>
                 {
                     b.Property<int>("Id")
@@ -355,6 +326,35 @@ namespace SocialMediaPlatformBackend.Migrations
                     b.ToTable("Reactions");
                 });
 
+            modelBuilder.Entity("SocialMediaPlatformBackend.Models.Relationship", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreateAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("FollowerProfileId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("FollowingProfileId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FollowerProfileId");
+
+                    b.HasIndex("FollowingProfileId");
+
+                    b.ToTable("Relationships");
+                });
+
             modelBuilder.Entity("SocialMediaPlatformBackend.Models.Role", b =>
                 {
                     b.Property<string>("Id")
@@ -512,7 +512,23 @@ namespace SocialMediaPlatformBackend.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("SocialMediaPlatformBackend.Models.Friend", b =>
+            modelBuilder.Entity("SocialMediaPlatformBackend.Models.Post", b =>
+                {
+                    b.HasOne("SocialMediaPlatformBackend.Models.Profile", "Profile")
+                        .WithMany("Posts")
+                        .HasForeignKey("ProfileId");
+
+                    b.Navigation("Profile");
+                });
+
+            modelBuilder.Entity("SocialMediaPlatformBackend.Models.Reaction", b =>
+                {
+                    b.HasOne("SocialMediaPlatformBackend.Models.Post", null)
+                        .WithMany("Reactions")
+                        .HasForeignKey("PostId");
+                });
+
+            modelBuilder.Entity("SocialMediaPlatformBackend.Models.Relationship", b =>
                 {
                     b.HasOne("SocialMediaPlatformBackend.Models.Profile", "Follower")
                         .WithMany()
@@ -529,22 +545,6 @@ namespace SocialMediaPlatformBackend.Migrations
                     b.Navigation("Follower");
 
                     b.Navigation("Following");
-                });
-
-            modelBuilder.Entity("SocialMediaPlatformBackend.Models.Post", b =>
-                {
-                    b.HasOne("SocialMediaPlatformBackend.Models.Profile", "Profile")
-                        .WithMany("Posts")
-                        .HasForeignKey("ProfileId");
-
-                    b.Navigation("Profile");
-                });
-
-            modelBuilder.Entity("SocialMediaPlatformBackend.Models.Reaction", b =>
-                {
-                    b.HasOne("SocialMediaPlatformBackend.Models.Post", null)
-                        .WithMany("Reactions")
-                        .HasForeignKey("PostId");
                 });
 
             modelBuilder.Entity("SocialMediaPlatformBackend.Models.User", b =>

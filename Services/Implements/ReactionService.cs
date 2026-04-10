@@ -1,4 +1,4 @@
-﻿using SocialMediaPlatformBackend.Data.DAO;
+﻿using SocialMediaPlatformBackend.Data.DAO.Interfaces;
 using SocialMediaPlatformBackend.Models;
 using SocialMediaPlatformBackend.Services.Interfaces;
 

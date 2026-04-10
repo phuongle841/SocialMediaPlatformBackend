@@ -21,7 +21,8 @@ namespace SocialMediaPlatformBackend.Services.Implement
         public async Task<string> GenerateToken(User user)
         {
             var JwtSettings = _configuration.GetSection("Jwt");
-            _logger.LogInformation(user.Id);
+
+            _logger.LogInformation("Generating token for user {UserId}", user.Id);
 
             var authClaims = new List<Claim>
             {
@@ -29,7 +30,6 @@ namespace SocialMediaPlatformBackend.Services.Implement
                 new Claim(System.IdentityModel.Tokens.Jwt.JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 new Claim(System.IdentityModel.Tokens.Jwt.JwtRegisteredClaimNames.Email, user.Email),
                 new Claim("uid", user.Id),
-                new Claim("This is the new claim","What name should this be?")
             };
 
             var roles = await _userManager.GetRolesAsync(user);
@@ -44,7 +44,7 @@ namespace SocialMediaPlatformBackend.Services.Implement
                 issuer: JwtSettings["Issuer"],
                 audience: JwtSettings["Audience"],
                 claims: authClaims,
-                expires: DateTime.Now.AddMinutes(double.Parse(JwtSettings["ExpiresInMinutes"])),
+                expires: DateTime.UtcNow.AddMinutes(double.Parse(JwtSettings["ExpiresInMinutes"])),
                 signingCredentials: credits
             );
             return new System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler().WriteToken(token);

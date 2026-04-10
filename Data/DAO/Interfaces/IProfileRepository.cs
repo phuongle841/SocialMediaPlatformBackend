@@ -1,6 +1,6 @@
 ﻿using SocialMediaPlatformBackend.Models;
 
-namespace SocialMediaPlatformBackend.Data.DAO
+namespace SocialMediaPlatformBackend.Data.DAO.Interfaces
 {
     public interface IProfileRepository : IRepository<Profile>
     {
